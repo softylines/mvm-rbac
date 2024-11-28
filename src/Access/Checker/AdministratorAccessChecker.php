@@ -29,6 +29,18 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
 
                     return $this->canWriteAccess($permission);
                 }
+               if ($accessRequest->section()->__toString() === 'products_management') {
+                 return $administrationRole->hasPermission(Permission::ofType('products_management', [OperationType::read()]));
+               }
+                if ($accessRequest->section()->__toString() === 'attributes_management') {
+                    return $administrationRole->hasPermission(Permission::ofType('attributes_management', [OperationType::read()]));
+                }
+                if ($accessRequest->section()->__toString() === 'inventory_management') {
+                    return $administrationRole->hasPermission(Permission::ofType('inventory_management', [OperationType::read()]));
+                }
+                if ($accessRequest->section()->__toString() === 'taxons_management') {
+                    return $administrationRole->hasPermission(Permission::ofType('taxons_management', [OperationType::read()]));
+                }
             }
         }
 
@@ -39,10 +51,14 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
     {
         return match (true) {
             $permission->equals(Permission::configuration()) => Section::configuration(),
-            $permission->equals(Permission::catalogManagement()) => Section::catalog(),
+            // $permission->equals(Permission::catalogManagement()) => Section::catalog(),
             $permission->equals(Permission::marketingManagement()) => Section::marketing(),
             $permission->equals(Permission::customerManagement()) => Section::customers(),
             $permission->equals(Permission::salesManagement()) => Section::sales(),
+            $permission->equals(Permission::productsManagement()) => Section::products(),
+            $permission->equals(Permission::attributesManagement()) => Section::attributes(),
+            $permission->equals(Permission::taxonsManagement()) => Section::taxons(),
+            $permission->equals(Permission::associationsManagement()) => Section::associations(),
             default => Section::ofType($permission->type()),
         };
     }

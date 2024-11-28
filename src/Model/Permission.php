@@ -18,7 +18,11 @@ final class Permission implements PermissionInterface
     public const MARKETING_MANAGEMENT_PERMISSION = 'marketing_management';
 
     public const SALES_MANAGEMENT_PERMISSION = 'sales_management';
-
+    public const PRODUCTS_MANAGEMENT_PERMISSION = 'products_management';
+    public const ATTRIBUTES_MANAGEMENT_PERMISSION ='attributes_management';
+    public const INVENTORY_MANAGEMENT_PERMISSION = 'inventory_management';
+    public const TAXONS_MANAGEMENT_PERMISSION = 'taxons_management';
+    public const ASSOCIATIONS_MANAGEMENT_PERMISSION = 'associations_management';
     private string $type;
 
     private array $operationTypes;
@@ -47,7 +51,26 @@ final class Permission implements PermissionInterface
     {
         return new self(self::SALES_MANAGEMENT_PERMISSION, $operationTypes);
     }
-
+    public static function productsManagement(array $operationTypes = []): self
+    {
+        return new self(self::PRODUCTS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function attributesManagement(array $operationTypes = []): self
+    {
+        return new self(self::ATTRIBUTES_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function inventoryManagement(array $operationTypes = []): self
+    {
+        return new self(self::INVENTORY_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function taxonsManagement(array $operationTypes = []): self
+    {
+        return new self(self::TAXONS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function associationsManagement(array $operationTypes = []): self
+    {
+        return new self(self::ASSOCIATIONS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
     public static function ofType(string $type, array $operationTypes = []): self
     {
         return new self($type, $operationTypes);

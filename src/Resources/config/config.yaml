@@ -9,14 +9,17 @@ parameters:
 
 odiseo_sylius_rbac:
     sylius_sections:
-        catalog_management:
-            - sylius_admin_inventory
+        products_management:
             - sylius_admin_product
-            - sylius_admin_product_association_type
+        attributes_management:
             - sylius_admin_product_attribute
-            - sylius_admin_product_option
-            - sylius_admin_product_variant
+        inventory_management:
+            - sylius_admin_inventory_unit
+        taxons_management:
             - sylius_admin_taxon
+        associations_management:
+            - sylius_admin_product_association_type
+            - sylius_admin_product_association
         configuration:
             - sylius_admin_admin_user
             - sylius_admin_channel

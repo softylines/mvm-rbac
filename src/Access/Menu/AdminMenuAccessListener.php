@@ -32,9 +32,9 @@ final class AdminMenuAccessListener
 
         $menu = $event->getMenu();
 
-        if ($this->hasAdminNoAccessToSection($adminUser, Section::catalog())) {
-            $menu->removeChild('catalog');
-        }
+        // if ($this->hasAdminNoAccessToSection($adminUser, Section::catalog())) {
+        //     $menu->removeChild('catalog');
+        // }
 
         if ($this->hasAdminNoAccessToSection($adminUser, Section::configuration())) {
             $menu->removeChild('configuration');
@@ -51,7 +51,34 @@ final class AdminMenuAccessListener
         if ($this->hasAdminNoAccessToSection($adminUser, Section::sales())) {
             $menu->removeChild('sales');
         }
-
+       
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::products())) {
+            $catalog = $menu->getChildren()['catalog'] ?? null;  
+ 
+            if ($catalog) {
+                $catalog->removeChild('products');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::attributes())) {
+            $catalog = $menu->getChildren()['catalog'] ?? null;  
+ 
+            if ($catalog) {
+                $catalog->removeChild('attributes');
+            }
+        }
+        if($this->hasAdminNoAccessToSection($adminUser, Section::taxons())) {
+            $catalog = $menu->getChildren()['catalog'] ?? null;  
+ 
+            if ($catalog) {
+                $catalog->removeChild('taxons');
+            }
+        }
+        if($this->hasAdminNoAccessToSection($adminUser, Section::associations())) {
+            $catalog = $menu->getChildren()['catalog'] ?? null; 
+            if ($catalog) {
+                $catalog->removeChild('associations');
+            }
+        }
         /** @var string $customSection */
         foreach (array_keys($this->configuration['custom']) as $customSection) {
             if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {

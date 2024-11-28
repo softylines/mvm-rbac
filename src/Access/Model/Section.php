@@ -15,7 +15,11 @@ final class Section
     public const MARKETING = 'marketing';
 
     public const SALES = 'sales';
-
+    public const PRODUCTS = 'products'; 
+    public const ATTRIBUTES = 'attributes';
+    public const INVENTORY = 'inventory';
+    public const TAXONS = 'taxons';
+    public const ASSOCIATIONS = 'associations';
     private string $type;
 
     public static function catalog(): self
@@ -38,11 +42,31 @@ final class Section
         return new self(self::MARKETING);
     }
 
+   public static function products(): self
+   {
+       return new self(self::PRODUCTS);
+    }
+
+    public static function attributes(): self
+    {
+        return new self(self::ATTRIBUTES);
+    }
+    public static function inventory(): self
+    {
+        return new self(self::INVENTORY);
+    }
+    public static function taxons(): self
+    {
+        return new self(self::TAXONS);
+    }
     public static function sales(): self
     {
         return new self(self::SALES);
     }
-
+    public static function associations(): self
+    {
+        return new self(self::ASSOCIATIONS);
+    }
     public static function ofType(string $type): self
     {
         return new self($type);
