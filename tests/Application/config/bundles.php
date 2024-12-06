@@ -57,5 +57,5 @@ return [
     Sylius\Calendar\SyliusCalendarBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     League\FlysystemBundle\FlysystemBundle::class => ['all' => true],
-    Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
+    Odiseo\SyliusRbacPlugin\SyliusRbacPlugin::class => ['all' => true],
 ];

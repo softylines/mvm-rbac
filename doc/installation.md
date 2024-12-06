@@ -10,7 +10,7 @@
 
 return [
     // ...
-    Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
+    Odiseo\SyliusRbacPlugin\SyliusRbacPlugin::class => ['all' => true],
 ];
 ```
 
@@ -19,8 +19,8 @@ return [
 ```yml
 # config/packages/_sylius.yaml
 imports:
-    # ...
-    - { resource: "@OdiseoSyliusRbacPlugin/Resources/config/config.yaml" }
+  # ...
+  - { resource: '@SyliusRbacPlugin/Resources/config/config.yaml' }
 ```
 
 4. Add the admin route
@@ -28,8 +28,8 @@ imports:
 ```yml
 # config/routes.yaml
 odiseo_sylius_rbac_plugin_admin:
-    resource: "@OdiseoSyliusRbacPlugin/Resources/config/routing/admin.yaml"
-    prefix: /admin
+  resource: '@SyliusRbacPlugin/Resources/config/routing/admin.yaml'
+  prefix: /admin
 ```
 
 5. Include traits and override the models
@@ -66,54 +66,55 @@ php bin/console cache:clear
 
 7. Run installation command
 
-    ```
-    php bin/console odiseo:rbac:install
-    ```
+   ```
+   php bin/console odiseo:rbac:install
+   ```
 
    Which consists of:
 
-    * `sylius:fixtures:load`
+   - `sylius:fixtures:load`
 
-      Loading fixture with a default "No sections access" role.
+     Loading fixture with a default "No sections access" role.
 
-      The command runs in non-interactive mode so it will NOT purge your database.
-      However, once you run it again it will throw an exception because of duplicate entry constraint violation.
+     The command runs in non-interactive mode so it will NOT purge your database.
+     However, once you run it again it will throw an exception because of duplicate entry constraint violation.
 
-      If you want to install RBAC plugin again on the same environment you will have to remove all roles manually
-      via administration panel or run all commands except `sylius:fixtures:load` separately.
+     If you want to install RBAC plugin again on the same environment you will have to remove all roles manually
+     via administration panel or run all commands except `sylius:fixtures:load` separately.
 
-    * `odiseo:rbac:normalize-administrators`
+   - `odiseo:rbac:normalize-administrators`
 
-      Assigns role created in a previous step to all already existent administrators.
+     Assigns role created in a previous step to all already existent administrators.
 
-    * `odiseo:rbac:grant-access <roleName> <adminSections>`
+   - `odiseo:rbac:grant-access <roleName> <adminSections>`
 
-      Where `adminSections` can be a space-separated list of any of these:
-        * catalogManagement
-        * configuration
-        * customerManagement
-        * marketingManagement
-        * salesManagement
+     Where `adminSections` can be a space-separated list of any of these:
 
-      #### Beware!
+     - catalogManagement
+     - configuration
+     - customerManagement
+     - marketingManagement
+     - salesManagement
 
-      There are two ways of defining root administrator's email address:
+     #### Beware!
 
-        * Provide it as a parameter in your configuration file (you will not be asked to enter it again via CLI during
-          plugin's installation)
+     There are two ways of defining root administrator's email address:
 
-        ```yml
-        parameters:
-            root_administrator_email: example@example.com
-        ``` 
+     - Provide it as a parameter in your configuration file (you will not be asked to enter it again via CLI during
+       plugin's installation)
 
-        * Provide it via CLI
+     ```yml
+     parameters:
+       root_administrator_email: example@example.com
+     ```
 
-      e.g. `bin/console odiseo:rbac:grant-access administrator configuration catalogManagement`
+     - Provide it via CLI
 
-      `In order to permit access to admin panel sections, please provide administrator's email address: sylius@example.com`
+     e.g. `bin/console odiseo:rbac:grant-access administrator configuration catalogManagement`
 
-      By default, installation command creates *Configurator* role with access granted to all sections.
+     `In order to permit access to admin panel sections, please provide administrator's email address: sylius@example.com`
+
+     By default, installation command creates _Configurator_ role with access granted to all sections.
 
 #### Beware!
 
@@ -127,7 +128,7 @@ command in order to provide an email address as an input parameter.
 
 ```yml
 doctrine:
-    orm:
-        resolve_target_entities:
-            Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
+  orm:
+    resolve_target_entities:
+      Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
 ```

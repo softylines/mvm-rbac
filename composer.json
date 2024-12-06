@@ -1,19 +1,20 @@
 {
-    "name": "odiseo/daly-meftah",
-    "description": "a development tool for RBAC",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Odiseo\\DalyMeftah\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Mohamed Ali Oussaif Meftah",
-            "email": "dalymeftah2003@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {}
+  "name": "odiseo/daly-meftah",
+  "description": "a development tool for RBAC",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Odiseo\\SyliusRbacPlugin\\": "src/",
+      "Tests\\Odiseo\\SyliusRbacPlugin\\": "tests/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Mohamed Ali Oussaif Meftah",
+      "email": "dalymeftah2003@gmail.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {}
 }
