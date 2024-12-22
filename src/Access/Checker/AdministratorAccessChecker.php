@@ -19,46 +19,73 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
         if ($admin instanceof AdministrationRoleAwareInterface) {
             $administrationRole = $admin->getAdministrationRole();
             Assert::notNull($administrationRole);
+    
+            $sectionType = $accessRequest->section()->__toString();
+            if ($sectionType === 'products_management') {
+                return $administrationRole->hasPermission(
+                    Permission::productsManagement([OperationType::read()])
+                );
+            }
+            
 
-            /** @var Permission $permission */
+            if ($sectionType === 'attributes_management') {
+                return $administrationRole->hasPermission(
+                    Permission::attributesManagement([OperationType::read()])
+                );
+            }
+            
+
+            if ($sectionType === 'taxons_management') {
+                return $administrationRole->hasPermission(
+                    Permission::taxonsManagement([OperationType::read()])
+                );
+            }
+    
+
             foreach ($administrationRole->getPermissions() as $permission) {
                 if ($this->getSectionForPermission($permission)->equals($accessRequest->section())) {
                     if (OperationType::READ === $accessRequest->operationType()->__toString()) {
                         return true;
                     }
-
                     return $this->canWriteAccess($permission);
-                }
-               if ($accessRequest->section()->__toString() === 'products_management') {
-                 return $administrationRole->hasPermission(Permission::ofType('products_management', [OperationType::read()]));
-               }
-                if ($accessRequest->section()->__toString() === 'attributes_management') {
-                    return $administrationRole->hasPermission(Permission::ofType('attributes_management', [OperationType::read()]));
-                }
-                if ($accessRequest->section()->__toString() === 'inventory_management') {
-                    return $administrationRole->hasPermission(Permission::ofType('inventory_management', [OperationType::read()]));
-                }
-                if ($accessRequest->section()->__toString() === 'taxons_management') {
-                    return $administrationRole->hasPermission(Permission::ofType('taxons_management', [OperationType::read()]));
                 }
             }
         }
-
+    
         return false;
     }
 
     private function getSectionForPermission(Permission $permission): Section
     {
         return match (true) {
-            $permission->equals(Permission::configuration()) => Section::configuration(),
-            // $permission->equals(Permission::catalogManagement()) => Section::catalog(),
-            $permission->equals(Permission::marketingManagement()) => Section::marketing(),
+          //  $permission->equals(Permission::configuration()) => Section::configuration(),
+            $permission->equals(Permission::channelsManagement()) => Section::channels(),
+            $permission->equals(Permission::countriesManagement()) => Section::countries(),
+            $permission->equals(Permission::zonesManagement()) => Section::zones(),
+            $permission->equals(Permission::currenciesManagement()) => Section::currencies(),
+            $permission->equals(Permission::localesManagement()) => Section::locales(),
+            $permission->equals(Permission::shippingCategoriesManagement()) => Section::shippingCategories(),
+            $permission->equals(Permission::shippingMethodsManagement()) => Section::shippingMethods(),
+            $permission->equals(Permission::paymentMethodsManagement()) => Section::paymentMethods(),
+            $permission->equals(Permission::exchangeRatesManagement()) => Section::exchangeRates(),
+            $permission->equals(Permission::taxRatesManagement()) => Section::taxRates(),
+            $permission->equals(Permission::taxCategoriesManagement()) => Section::taxCategories(),
+         //   $permission->equals(Permission::catalogManagement()) => Section::catalog(),
+           // $permission->equals(Permission::marketingManagement()) => Section::marketing(),
+            $permission->equals(Permission::ProductReviews()) => Section::productReviews(),
+            $permission->equals(Permission::promotions()) => Section::promotions(),
+            $permission->equals(Permission::catalogPromotions()) => Section::catalogPromotions(),
             $permission->equals(Permission::customerManagement()) => Section::customers(),
-            $permission->equals(Permission::salesManagement()) => Section::sales(),
+           // $permission->equals(Permission::salesManagement()) => Section::sales(),
+            $permission->equals(Permission::shippingManagement()) => Section::shipping(),
+            $permission->equals(Permission::paymentsManagement()) => Section::payments(),
+            $permission->equals(Permission::ordersManagement()) => Section::orders(),
             $permission->equals(Permission::productsManagement()) => Section::products(),
             $permission->equals(Permission::attributesManagement()) => Section::attributes(),
             $permission->equals(Permission::taxonsManagement()) => Section::taxons(),
-            $permission->equals(Permission::associationsManagement()) => Section::associations(),
+            $permission->equals(Permission::inventoryManagement()) => Section::inventory(),
+            $permission->equals(Permission::optionsManagement()) => Section::options(),
+            $permission->equals(Permission::associationTypesManagement()) => Section::associationTypes(),
             default => Section::ofType($permission->type()),
         };
     }

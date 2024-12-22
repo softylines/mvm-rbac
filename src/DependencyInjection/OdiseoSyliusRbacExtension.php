@@ -47,7 +47,7 @@ final class OdiseoSyliusRbacExtension extends AbstractResourceExtension implemen
 
     protected function getMigrationsDirectory(): string
     {
-        return '@SyliusRbacPlugin/Migrations';
+        return '@OdiseoSyliusRbacPlugin/Migrations';
     }
 
     protected function getNamespacesOfMigrationsExecutedBefore(): array

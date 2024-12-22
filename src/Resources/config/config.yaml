@@ -9,17 +9,26 @@ parameters:
 
 odiseo_sylius_rbac:
     sylius_sections:
+        catalog_management:
+            - sylius_admin_inventory
+            - sylius_admin_product
+            - sylius_admin_product_association_type
+            - sylius_admin_product_attribute
+            - sylius_admin_product_option
+            - sylius_admin_product_variant
+            - sylius_admin_taxon
         products_management:
             - sylius_admin_product
         attributes_management:
             - sylius_admin_product_attribute
         inventory_management:
-            - sylius_admin_inventory_unit
+            - sylius_admin_inventory
         taxons_management:
             - sylius_admin_taxon
-        associations_management:
+        options:
+            - sylius_admin_product_option
+        association_types_management:
             - sylius_admin_product_association_type
-            - sylius_admin_product_association
         configuration:
             - sylius_admin_admin_user
             - sylius_admin_channel
@@ -33,6 +42,28 @@ odiseo_sylius_rbac:
             - sylius_admin_tax_category
             - sylius_admin_tax_rate
             - sylius_admin_zone
+        channels_management:
+            - sylius_admin_channel
+        countries_management:
+            - sylius_admin_country
+        zones_management:
+            - sylius_admin_zone
+        currencies_management:
+            - sylius_admin_currency
+        locales_management:
+            - sylius_admin_locale
+        shipping_categories_management:
+            - sylius_admin_shipping_category
+        shipping_methods_management:
+            - sylius_admin_shipping_method
+        payment_methods_management:
+            - sylius_admin_payment_method
+        exchange_rates_management:
+            - sylius_admin_exchange_rate
+        tax_rates_management:
+            - sylius_admin_tax_rate
+        tax_categories_management:
+            - sylius_admin_tax_category
         customers_management:
             - sylius_admin_customer
             - sylius_admin_customer_group
@@ -41,10 +72,22 @@ odiseo_sylius_rbac:
             - sylius_admin_product_review
             - sylius_admin_promotion
             - sylius_admin_catalog_promotion
+        product_reviews:
+            - sylius_admin_product_review
+        promotions:
+            - sylius_admin_promotion
+        catalog_promotions:
+            - sylius_admin_catalog_promotion
         sales_management:
             - sylius_admin_order
             - sylius_admin_payment
             - sylius_admin_shipment
+        shipping_management:
+            - sylius_admin_shipment
+        payments_management:
+            - sylius_admin_payment
+        orders_management:
+            - sylius_admin_order
     custom_sections:
         rbac:
             - odiseo_sylius_rbac_plugin
