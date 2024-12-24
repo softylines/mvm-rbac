@@ -9,14 +9,6 @@ parameters:
 
 odiseo_sylius_rbac:
     sylius_sections:
-        catalog_management:
-            - sylius_admin_inventory
-            - sylius_admin_product
-            - sylius_admin_product_association_type
-            - sylius_admin_product_attribute
-            - sylius_admin_product_option
-            - sylius_admin_product_variant
-            - sylius_admin_taxon
         products_management:
             - sylius_admin_product
         attributes_management:
@@ -29,19 +21,6 @@ odiseo_sylius_rbac:
             - sylius_admin_product_option
         association_types_management:
             - sylius_admin_product_association_type
-        configuration:
-            - sylius_admin_admin_user
-            - sylius_admin_channel
-            - sylius_admin_country
-            - sylius_admin_currency
-            - sylius_admin_exchange_rate
-            - sylius_admin_locale
-            - sylius_admin_payment_method
-            - sylius_admin_shipping_category
-            - sylius_admin_shipping_method
-            - sylius_admin_tax_category
-            - sylius_admin_tax_rate
-            - sylius_admin_zone
         channels_management:
             - sylius_admin_channel
         countries_management:
@@ -68,20 +47,12 @@ odiseo_sylius_rbac:
             - sylius_admin_customer
             - sylius_admin_customer_group
             - sylius_admin_shop_user
-        marketing_management:
-            - sylius_admin_product_review
-            - sylius_admin_promotion
-            - sylius_admin_catalog_promotion
         product_reviews:
             - sylius_admin_product_review
         promotions:
             - sylius_admin_promotion
         catalog_promotions:
             - sylius_admin_catalog_promotion
-        sales_management:
-            - sylius_admin_order
-            - sylius_admin_payment
-            - sylius_admin_shipment
         shipping_management:
             - sylius_admin_shipment
         payments_management:
