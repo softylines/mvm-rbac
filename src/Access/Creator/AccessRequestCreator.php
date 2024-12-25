@@ -108,7 +108,7 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
 
         foreach ($this->configuration['product_reviews'] as $productReviewsRoutePrefix) {
             if (str_starts_with($routeName, $productReviewsRoutePrefix)) {
-                return new AccessRequest(Section::product_reviews(), $operationType);
+                return new AccessRequest(Section::productReviews(), $operationType);
             }
         }   
         foreach ($this->configuration['promotions'] as $promotionsRoutePrefix) {

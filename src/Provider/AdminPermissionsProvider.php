@@ -24,7 +24,7 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
         $rbacConfiguration = array_merge(
             array_keys($configuration),
             [
-               // Permission::CATALOG_MANAGEMENT_PERMISSION,
+                Permission::CATALOG_MANAGEMENT_PERMISSION,
                 Permission::PRODUCTS_MANAGEMENT_PERMISSION,
                 Permission::ATTRIBUTES_MANAGEMENT_PERMISSION,
                 Permission::INVENTORY_MANAGEMENT_PERMISSION,
