@@ -179,13 +179,13 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
         }
     
 
-        foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
-            foreach ($sectionPrefixes as $prefix) {
-                if (str_starts_with($routeName, $prefix)) {
-                    return new AccessRequest(Section::ofType($sectionName), $operationType);
-                }
-            }
-        }
+  //      foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
+   //         foreach ($sectionPrefixes as $prefix) {
+   //             if (str_starts_with($routeName, $prefix)) {
+    //                return new AccessRequest(Section::ofType($sectionName), $operationType);
+   //             }
+    //        }
+   //     }
 
         throw UnresolvedRouteNameException::withRouteName($routeName);
     }

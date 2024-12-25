@@ -207,11 +207,11 @@ final class AdminMenuAccessListener
             }
         }
         /** @var string $customSection */
-        foreach (array_keys($this->configuration['custom']) as $customSection) {
-            if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {
-                $menu->removeChild($customSection);
-            }
-        }
+       // foreach (array_keys($this->configuration['custom']) as $customSection) {
+        //    if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {
+           //     $menu->removeChild($customSection);
+         //   }
+     //   }
     }
 
     private function hasAdminNoAccessToSection(AdminUserInterface $adminUser, Section $section): bool
