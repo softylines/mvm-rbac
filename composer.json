@@ -1,5 +1,5 @@
 {
-  "name": "odiseo/rbac",
+  "name": "sylius/custom_rbac",
   "type": "library",
   "keywords": [
     "sylius",

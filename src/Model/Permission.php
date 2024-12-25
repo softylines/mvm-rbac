@@ -9,7 +9,7 @@ use Webmozart\Assert\Assert;
 
 final class Permission implements PermissionInterface
 {
-    //public const CATALOG_MANAGEMENT_PERMISSION = 'catalog_management';
+    public const CATALOG_MANAGEMENT_PERMISSION = 'catalog_management';
     public const PRODUCTS_MANAGEMENT_PERMISSION = 'products_management';
     public const ATTRIBUTES_MANAGEMENT_PERMISSION ='attributes_management';
     public const INVENTORY_MANAGEMENT_PERMISSION = 'inventory_management';
