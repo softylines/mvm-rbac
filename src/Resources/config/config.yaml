@@ -1,64 +1,78 @@
 imports:
-    - { resource: fixtures.yaml }
-    - { resource: grids.yaml }
-    - { resource: resources.yaml }
-    - { resource: sylius_ui.yaml }
+  - { resource: fixtures.yaml }
+  - { resource: grids.yaml }
+  - { resource: resources.yaml }
+  - { resource: sylius_ui.yaml }
 
 parameters:
-    root_administrator_email: ''
+  root_administrator_email: ''
 
 odiseo_sylius_rbac:
-    sylius_sections:
-        products_management:
-            - sylius_admin_product
-        attributes_management:
-            - sylius_admin_product_attribute
-        inventory_management:
-            - sylius_admin_inventory
-        taxons_management:
-            - sylius_admin_taxon
-        options:
-            - sylius_admin_product_option
-        association_types_management:
-            - sylius_admin_product_association_type
-        channels_management:
-            - sylius_admin_channel
-        countries_management:
-            - sylius_admin_country
-        zones_management:
-            - sylius_admin_zone
-        currencies_management:
-            - sylius_admin_currency
-        locales_management:
-            - sylius_admin_locale
-        shipping_categories_management:
-            - sylius_admin_shipping_category
-        shipping_methods_management:
-            - sylius_admin_shipping_method
-        payment_methods_management:
-            - sylius_admin_payment_method
-        exchange_rates_management:
-            - sylius_admin_exchange_rate
-        tax_rates_management:
-            - sylius_admin_tax_rate
-        tax_categories_management:
-            - sylius_admin_tax_category
-        customers_management:
-            - sylius_admin_customer
-            - sylius_admin_customer_group
-            - sylius_admin_shop_user
-        product_reviews:
-            - sylius_admin_product_review
-        promotions:
-            - sylius_admin_promotion
-        catalog_promotions:
-            - sylius_admin_catalog_promotion
-        shipping_management:
-            - sylius_admin_shipment
-        payments_management:
-            - sylius_admin_payment
-        orders_management:
-            - sylius_admin_order
-    custom_sections:
-        rbac:
-            - odiseo_sylius_rbac_plugin
+  sylius_sections:
+    products_management:
+      - sylius_admin_product
+    attributes_management:
+      - sylius_admin_product_attribute
+    inventory_management:
+      - sylius_admin_inventory
+    taxons_management:
+      - sylius_admin_taxon
+    options:
+      - sylius_admin_product_option
+    association_types_management:
+      - sylius_admin_product_association_type
+    channels_management:
+      - sylius_admin_channel
+    countries_management:
+      - sylius_admin_country
+    zones_management:
+      - sylius_admin_zone
+    currencies_management:
+      - sylius_admin_currency
+    locales_management:
+      - sylius_admin_locale
+    shipping_categories_management:
+      - sylius_admin_shipping_category
+    shipping_methods_management:
+      - sylius_admin_shipping_method
+    payment_methods_management:
+      - sylius_admin_payment_method
+    exchange_rates_management:
+      - sylius_admin_exchange_rate
+    tax_rates_management:
+      - sylius_admin_tax_rate
+    tax_categories_management:
+      - sylius_admin_tax_category
+    customers_management:
+      - sylius_admin_customer
+      - sylius_admin_customer_group
+      - sylius_admin_shop_user
+    product_reviews:
+      - sylius_admin_product_review
+    promotions:
+      - sylius_admin_promotion
+    catalog_promotions:
+      - sylius_admin_catalog_promotion
+    shipping_management:
+      - sylius_admin_shipment
+    payments_management:
+      - sylius_admin_payment
+    orders_management:
+      - sylius_admin_order
+    marketplace_management:
+      - open_marketplace_admin_marketplace
+    product_listings_management:
+      - open_marketplace_admin_product_listing
+    vendors_management:
+      - open_marketplace_admin_vendor
+    settlements_management:
+      - open_marketplace_admin_settlement
+    virtual_wallets_management:
+      - open_marketplace_admin_virtual_wallet
+    messages_management:
+      - open_marketplace_admin_conversation_index
+    message_categories_management:
+      - open_marketplace_admin_conversation_category_index
+  custom_sections:
+    rbac:
+      - odiseo_sylius_rbac_plugin

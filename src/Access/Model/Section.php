@@ -26,7 +26,7 @@ final class Section
     public const TAX_RATES = 'tax_rates';   
     public const TAX_CATEGORIES = 'tax_categories'; 
     public const CUSTOMERS = 'customers';
-    public const MARKETING = 'marketing';
+    //public const MARKETING = 'marketing';
     public const PRODUCT_REVIEWS = 'product_reviews';
     public const PROMOTIONS = 'promotions';
     public const CATALOG_PROMOTIONS = 'catalog_promotions';
@@ -35,6 +35,15 @@ final class Section
     public const PAYMENTS = 'payments';
     public const ORDERS = 'orders';
     public const CUSTOMER = 'customers';
+    //custom section
+    public const MARKETPLACE = 'marketplace';
+    public const PRODUCT_LISTINGS = 'product_listings';
+    public const VENDORS = 'vendors';
+    public const SETTLEMENTS = 'settlements';
+    public const VIRTUAL_WALLETS = 'virtual_wallets';
+    public const CONVERSATIONS = 'conversations';
+    public const CONVERSATION_CATEGORIES = 'conversation_categories';
+    
     private string $type;
 
     public static function catalog(): self
@@ -96,10 +105,10 @@ final class Section
         return new self(self::CUSTOMERS);
     }
 
-    public static function marketing(): self
-    {
-        return new self(self::MARKETING);
-    }
+  //  public static function marketing(): self
+  //  {
+  //      return new self(self::MARKETING);
+  //  }
     public static function productReviews(): self
     {
         return new self(self::PRODUCT_REVIEWS);
@@ -157,6 +166,39 @@ final class Section
     public static function orders(): self
     {
         return new self(self::ORDERS);
+    }
+    //custom section
+    public static function marketPlaceManagement(): self
+    {
+        return new self(self::MARKETPLACE);
+    }
+    public static function productListings(): self
+    {
+        return new self(self::PRODUCT_LISTINGS);
+    }
+    public static function vendors(): self
+    {
+        return new self(self::VENDORS);
+    }
+
+    public static function settlements(): self
+    {
+        return new self(self::SETTLEMENTS);
+    }
+
+    public static function virtualWallets(): self
+    {
+        return new self(self::VIRTUAL_WALLETS);
+    }
+
+    public static function conversations(): self
+    {
+        return new self(self::CONVERSATIONS);
+    }
+
+    public static function conversationCategories(): self
+    {
+        return new self(self::CONVERSATION_CATEGORIES);
     }
     public static function ofType(string $type): self
     {

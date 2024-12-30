@@ -29,8 +29,13 @@ final class Permission implements PermissionInterface
     public const TAX_CATEGORIES_MANAGEMENT_PERMISSION = 'tax_categories_management';
 
     public const CUSTOMERS_MANAGEMENT_PERMISSION = 'customers_management';
-
-    public const MARKETING_MANAGEMENT_PERMISSION = 'marketing_management';
+    public const MARKETPLACE_MANAGEMENT_PERMISSION = 'marketplace_management';
+    public const PRODUCT_LISTINGS_MANAGEMENT_PERMISSION = 'product_listings_management';
+    public const VENDORS_MANAGEMENT_PERMISSION = 'vendors_management';
+    public const SETTLEMENTS_MANAGEMENT_PERMISSION = 'settlements_management';
+    public const VIRTUAL_WALLETS_MANAGEMENT_PERMISSION = 'virtual_wallets_management';
+    public const CONVERSATIONS_MANAGEMENT_PERMISSION = 'conversations_management';
+    public const CONVERSATION_CATEGORIES_MANAGEMENT_PERMISSION = 'message_categories_management';
     public const PRODUCT_REVIEWS_PERMISSION = 'product_reviews';
     public const PROMOTIONS_PERMISSION = 'promotions';
     public const CATALOG_PROMOTIONS_PERMISSION = 'catalog_promotions';
@@ -123,11 +128,34 @@ final class Permission implements PermissionInterface
     {
         return new self(self::CUSTOMERS_MANAGEMENT_PERMISSION, $operationTypes);
     }
-
-    //public static function marketingManagement(array $operationTypes = []): self
-    //{
-    //    return new self(self::MARKETING_MANAGEMENT_PERMISSION, $operationTypes);
-    //}
+    public static function marketPlaceManagement(array $operationTypes = []): self
+    {
+        return new self(self::MARKETPLACE_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function productListingsManagement(array $operationTypes = []): self
+    {
+        return new self(self::PRODUCT_LISTINGS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function vendorsManagement(array $operationTypes = []): self
+    {
+        return new self(self::VENDORS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function settlementsManagement(array $operationTypes = []): self
+    {
+        return new self(self::SETTLEMENTS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function virtualWalletsManagement(array $operationTypes = []): self
+    {
+        return new self(self::VIRTUAL_WALLETS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function conversationsManagement(array $operationTypes = []): self
+    {
+        return new self(self::CONVERSATIONS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+    public static function conversationCategoriesManagement(array $operationTypes = []): self
+    {
+        return new self(self::CONVERSATION_CATEGORIES_MANAGEMENT_PERMISSION, $operationTypes);
+    }
 
     public static function ProductReviews(array $operationTypes = []): self
     {
