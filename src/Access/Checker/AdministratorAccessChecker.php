@@ -40,7 +40,7 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
                     Permission::taxonsManagement([OperationType::read()])
                 );
             }
-
+    
 
             foreach ($administrationRole->getPermissions() as $permission) {
                 if ($this->getSectionForPermission($permission)->equals($accessRequest->section())) {
@@ -86,13 +86,6 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
             $permission->equals(Permission::inventoryManagement()) => Section::inventory(),
             $permission->equals(Permission::optionsManagement()) => Section::options(),
             $permission->equals(Permission::associationTypesManagement()) => Section::associationTypes(),
-            $permission->equals(Permission::marketPlaceManagement()) => Section::marketPlaceManagement(),
-            $permission->equals(Permission::productListingsManagement()) => Section::productListings(),
-            $permission->equals(Permission::vendorsManagement()) => Section::vendors(),
-            $permission->equals(Permission::settlementsManagement()) => Section::settlements(),
-            $permission->equals(Permission::virtualWalletsManagement()) => Section::virtualWallets(),
-            $permission->equals(Permission::conversationsManagement()) => Section::conversations(),
-            $permission->equals(Permission::conversationCategoriesManagement()) => Section::conversationCategories(),
             default => Section::ofType($permission->type()),
         };
     }

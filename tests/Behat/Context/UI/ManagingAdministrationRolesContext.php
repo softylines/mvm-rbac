@@ -92,13 +92,19 @@ final class ManagingAdministrationRolesContext implements Context
         $this->updatePage->addPermission($permissionName, $accesses);
     }
 
-    /**
-     * @When I remove :permissionName permission
-     */
-    public function removePermission(string $permissionName): void
-    {
-        $this->updatePage->removePermission($permissionName);
+/**
+ * @When I remove :permissionName permission
+ */
+public function removePermission(string $permissionName): void
+{   
+    $administrationRole = $this->getCurrentAdministrationRole();
+
+    if ($administrationRole->getName() === 'Configurator' && $permissionName === 'RBAC') {
+        throw new \RuntimeException('Error: The RBAC permission cannot be removed from the Configurator role as it is required.');
     }
+
+    $this->updatePage->removePermission($permissionName);
+}
 
     /**
      * @When I remove all accesses from :permissionName permission

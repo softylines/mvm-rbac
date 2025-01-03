@@ -52,13 +52,6 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
                 Permission::SHIPPING_MANAGEMENT_PERMISSION,
                 Permission::PAYMENTS_MANAGEMENT_PERMISSION,
                 Permission::ORDERS_MANAGEMENT_PERMISSION,
-                Permission::PRODUCT_LISTINGS_MANAGEMENT_PERMISSION,
-                Permission::VENDORS_MANAGEMENT_PERMISSION,
-                Permission::SETTLEMENTS_MANAGEMENT_PERMISSION,
-                Permission::VIRTUAL_WALLETS_MANAGEMENT_PERMISSION,
-                Permission::CONVERSATIONS_MANAGEMENT_PERMISSION,
-                Permission::CONVERSATION_CATEGORIES_MANAGEMENT_PERMISSION,
-               Permission::MARKETPLACE_MANAGEMENT_PERMISSION,
             ],
         );
 

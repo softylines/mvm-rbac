@@ -26,3 +26,4 @@ services:
             - '@messenger.default_bus'
             - '@Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer'
             - '@router'
+            - '@odiseo_sylius_rbac_plugin.repository.administration_role'

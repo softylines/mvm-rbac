@@ -5,3 +5,4 @@ odiseo_sylius_rbac_plugin:
     administration_role_successfully_updated: 'Administration role has been successfully updated'
     you_are_not_allowed_to_do_that: 'You are not allowed to do that'
     you_have_no_access_to_this_section: 'You have no access to this section'
+    configurator_rbac_permission_denied: 'Configurator role cannot have RBAC permissions'
