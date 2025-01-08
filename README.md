@@ -17,8 +17,6 @@ Write permission access means also updating and deleting.
 ## Documentation
 
 - [Installation](doc/installation.md)
-- [Customization](doc/customization.md)
-- [Tests](doc/tests.md)
 
 ## Credits
 
