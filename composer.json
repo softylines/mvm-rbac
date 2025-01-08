@@ -1,5 +1,5 @@
 {
-  "name": "sylius/custom_rbac",
+  "name": "softylines/mvm-rbac",
   "type": "library",
   "keywords": [
     "sylius",
