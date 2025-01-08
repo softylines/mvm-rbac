@@ -1,6 +1,6 @@
 ## Installation
 
-1. Run `composer require odiseoteam/sylius-rbac-plugin --no-scripts`
+1. Run `composer require softylines/mvm-rbac`
 
 2. Enable the plugin in bundles.php
 
@@ -10,7 +10,7 @@
 
 return [
     // ...
-    Odiseo\SyliusRbacPlugin\SyliusRbacPlugin::class => ['all' => true],
+ Odiseo\SyliusRbacPlugin\OdiseoSyliusRbacPlugin::class => ['all' => true],
 ];
 ```
 
@@ -20,7 +20,7 @@ return [
 # config/packages/_sylius.yaml
 imports:
   # ...
-  - { resource: '@SyliusRbacPlugin/Resources/config/config.yaml' }
+  - { resource: '@OdiseoSyliusRbacPlugin/Resources/config/config.yaml' }
 ```
 
 4. Add the admin route
@@ -28,7 +28,7 @@ imports:
 ```yml
 # config/routes.yaml
 odiseo_sylius_rbac_plugin_admin:
-  resource: '@SyliusRbacPlugin/Resources/config/routing/admin.yaml'
+  resource: '@OdiseoSyliusRbacPlugin/Resources/config/routing/admin.yaml'
   prefix: /admin
 ```
 
@@ -81,54 +81,3 @@ php bin/console cache:clear
 
      If you want to install RBAC plugin again on the same environment you will have to remove all roles manually
      via administration panel or run all commands except `sylius:fixtures:load` separately.
-
-   - `odiseo:rbac:normalize-administrators`
-
-     Assigns role created in a previous step to all already existent administrators.
-
-   - `odiseo:rbac:grant-access <roleName> <adminSections>`
-
-     Where `adminSections` can be a space-separated list of any of these:
-
-     - catalogManagement
-     - configuration
-     - customerManagement
-     - marketingManagement
-     - salesManagement
-
-     #### Beware!
-
-     There are two ways of defining root administrator's email address:
-
-     - Provide it as a parameter in your configuration file (you will not be asked to enter it again via CLI during
-       plugin's installation)
-
-     ```yml
-     parameters:
-       root_administrator_email: example@example.com
-     ```
-
-     - Provide it via CLI
-
-     e.g. `bin/console odiseo:rbac:grant-access administrator configuration catalogManagement`
-
-     `In order to permit access to admin panel sections, please provide administrator's email address: sylius@example.com`
-
-     By default, installation command creates _Configurator_ role with access granted to all sections.
-
-#### Beware!
-
-You can also use `bin/console odiseo:rbac:grant-access-to-given-administrator <email> <roleName> <adminSections>`
-command in order to provide an email address as an input parameter.
-
-#### Beware!
-
-`AdminUser` entity references `AdministrationRoleInterface`, which is an abstraction layer above the default
-`AdministrationRole` implementation. You can easily customize it by adding a following snippet in your `*.yaml` configuration file:
-
-```yml
-doctrine:
-  orm:
-    resolve_target_entities:
-      Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface: FullyQualifiedClassName
-```
