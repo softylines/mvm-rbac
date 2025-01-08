@@ -1,6 +1,6 @@
-<p align="center"><a href="https://www.softylines.com/" target="_blank"><img src="https://github.com/odiseoteam/SyliusRbacPlugin/blob/master/softylines.png" width="140"></a></p>
+<p align="center"><a href="https://www.softylines.com/" target="_blank"><img src="softylines.png" width="140"></a></p>
 
-<h1 align="center">Sofylines Rbac Plugin</h1>
+<h1 align="center">Softylines Rbac Plugin</h1>
 
 ## Description
 
