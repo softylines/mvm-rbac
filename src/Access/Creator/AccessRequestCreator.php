@@ -25,47 +25,7 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
       //          return new AccessRequest(Section::configuration(), $operationType);
       //      }
       //  }
-        foreach ($this->configuration['marketplace_management'] as $marketPlaceRoutePrefix) {
-            if (str_starts_with($routeName, $marketPlaceRoutePrefix)) {
-                return new AccessRequest(Section::marketPlaceManagement(), $operationType);
-            }
-        }
 
-        foreach ($this->configuration['product_listings_management'] as $productListingsRoutePrefix) {
-            if (str_starts_with($routeName, $productListingsRoutePrefix)) {
-                return new AccessRequest(Section::productListings(), $operationType);
-            }
-        }
-        foreach ($this->configuration['vendors_management'] as $vendorsRoutePrefix) {
-            if (str_starts_with($routeName, $vendorsRoutePrefix)) {
-                return new AccessRequest(Section::vendors(), $operationType);
-            }
-        }
-        foreach ($this->configuration['settlements_management'] as $settlementsRoutePrefix) {
-            if (str_starts_with($routeName, $settlementsRoutePrefix)) {
-                return new AccessRequest(Section::settlements(), $operationType);
-            }
-        }
-        foreach ($this->configuration['virtual_wallets_management'] as $virtualWalletsRoutePrefix) {
-            if (str_starts_with($routeName, $virtualWalletsRoutePrefix)) {
-                return new AccessRequest(Section::virtualWallets(), $operationType);
-            }
-        }
-
-        foreach ($this->configuration['messages_management'] as $messagesRoutePrefix) {
-            if (str_starts_with($routeName, $messagesRoutePrefix)) {
-                return new AccessRequest(Section::conversations(), $operationType);
-            }
-        }
-        // dump($routeName);
-        // dump($this->configuration['message_categories_management']);
-        foreach ($this->configuration['message_categories_management'] as $messageCategoriesRoutePrefix) {
-            // dump($messageCategoriesRoutePrefix);
-            if (str_starts_with($routeName, $messageCategoriesRoutePrefix)) {
-                return new AccessRequest(Section::conversationCategories(), $operationType);
-            }
-        }
-        // die;
         foreach ($this->configuration['channels_management'] as $channelsRoutePrefix) {
             if (str_starts_with($routeName, $channelsRoutePrefix)) {
                 return new AccessRequest(Section::channels(), $operationType);
@@ -219,13 +179,13 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
         }
     
 
-      foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
-            foreach ($sectionPrefixes as $prefix) {
-                if (str_starts_with($routeName, $prefix)) {
-                    return new AccessRequest(Section::ofType($sectionName), $operationType);
-                }
-            }
-        }
+        foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
+           foreach ($sectionPrefixes as $prefix) {
+               if (str_starts_with($routeName, $prefix)) {
+                   return new AccessRequest(Section::ofType($sectionName), $operationType);
+               }
+           }
+      }
 
         throw UnresolvedRouteNameException::withRouteName($routeName);
     }

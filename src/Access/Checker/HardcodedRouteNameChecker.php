@@ -10,8 +10,7 @@ final class HardcodedRouteNameChecker implements RouteNameCheckerInterface
     {
         return
             str_contains($routeName, 'sylius_admin') ||
-            str_contains($routeName, 'odiseo_sylius_rbac_plugin_admin') ||
-            str_contains($routeName, 'open_marketplace_admin')
+            str_contains($routeName, 'odiseo_sylius_rbac_plugin_admin')
         ;
     }
 }
