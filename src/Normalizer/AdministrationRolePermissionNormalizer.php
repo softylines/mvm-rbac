@@ -10,31 +10,52 @@ final class AdministrationRolePermissionNormalizer implements AdministrationRole
 {
     public function normalize(?array $administrationRolePermissions): array
     {
+        if (null === $administrationRolePermissions) {
+            return [];
+        }
+
         $normalizedPermissions = [];
 
-        if (null !== $administrationRolePermissions) {
-            foreach (array_keys($administrationRolePermissions) as $administrationRolePermission) {
-                $hasReadOperationType = in_array(
+        foreach ($administrationRolePermissions as $administrationRolePermission => $operationTypes) {
+            if (is_array($operationTypes)) {
+                $hasReadOperation = in_array(
                     OperationType::READ,
-                    array_keys($administrationRolePermissions[$administrationRolePermission]),
-                    true,
+                    $operationTypes,
+                    true
                 );
 
-                $hasWriteOperationType = in_array(
-                    OperationType::WRITE,
-                    array_keys($administrationRolePermissions[$administrationRolePermission]),
-                    true,
+                $hasCreateOperation = in_array(
+                    OperationType::CREATE,
+                    $operationTypes,
+                    true
                 );
 
-                if ($hasWriteOperationType) {
+                $hasUpdateOperation = in_array(
+                    OperationType::UPDATE,
+                    $operationTypes,
+                    true
+                );
+
+                $hasDeleteOperation = in_array(
+                    OperationType::DELETE,
+                    $operationTypes,
+                    true
+                );
+
+                if ($hasReadOperation) {
                     $normalizedPermissions[$administrationRolePermission][] = OperationType::read();
-                    $normalizedPermissions[$administrationRolePermission][] = OperationType::write();
-
-                    continue;
                 }
 
-                if ($hasReadOperationType) {
-                    $normalizedPermissions[$administrationRolePermission][] = OperationType::read();
+                if ($hasCreateOperation) {
+                    $normalizedPermissions[$administrationRolePermission][] = OperationType::create();
+                }
+
+                if ($hasUpdateOperation) {
+                    $normalizedPermissions[$administrationRolePermission][] = OperationType::update();
+                }
+
+                if ($hasDeleteOperation) {
+                    $normalizedPermissions[$administrationRolePermission][] = OperationType::delete();
                 }
             }
         }

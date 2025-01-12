@@ -19,12 +19,42 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
     public function createFromRouteName(string $routeName, string $requestMethod): AccessRequest
     {
         $operationType = $this->resolveOperationType($requestMethod);
-
-      //  foreach ($this->configuration['configuration'] as $configurationRoutePrefix) {
-      //      if (str_starts_with($routeName, $configurationRoutePrefix)) {
-      //          return new AccessRequest(Section::configuration(), $operationType);
-      //      }
-      //  }
+        if ($routeName === 'sylius_admin_dashboard') {
+            return new AccessRequest(Section::dashboard(), $operationType);
+        }
+    if (str_starts_with($routeName, 'sylius_admin_admin_user')) {
+        return new AccessRequest(Section::administrators(), $operationType);
+    }
+foreach($this->configuration['product_listings'] as $productListingsRoutePrefix){
+    if (str_starts_with($routeName, $productListingsRoutePrefix)) {
+        return new AccessRequest(Section::productListings(), $operationType);
+    }
+}
+foreach($this->configuration['vendor'] as $vendorRoutePrefix){
+    if (str_starts_with($routeName, $vendorRoutePrefix)) {
+        return new AccessRequest(Section::vendor(), $operationType);
+    }
+}
+foreach($this->configuration['settlement'] as $settlementRoutePrefix){
+    if (str_starts_with($routeName, $settlementRoutePrefix)) {
+        return new AccessRequest(Section::settlement(), $operationType);
+    }
+}
+foreach($this->configuration['virtual_wallet'] as $virtualWalletRoutePrefix){
+    if (str_starts_with($routeName, $virtualWalletRoutePrefix)) {
+        return new AccessRequest(Section::virtualWallet(), $operationType);
+    }
+}
+foreach($this->configuration['messages'] as $messagesRoutePrefix){
+    if (str_starts_with($routeName, $messagesRoutePrefix)) {
+        return new AccessRequest(Section::messages(), $operationType);
+    }
+}
+foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefix){
+    if (str_starts_with($routeName, $messagesCategoryRoutePrefix)) {
+        return new AccessRequest(Section::messagesCategory(), $operationType);
+    }
+}
 
         foreach ($this->configuration['channels_management'] as $channelsRoutePrefix) {
             if (str_starts_with($routeName, $channelsRoutePrefix)) {
@@ -192,10 +222,15 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
 
     public function resolveOperationType(string $requestMethod): OperationType
     {
-        if ('GET' === $requestMethod || 'HEAD' === $requestMethod) {
-            return OperationType::read();
-        }
+        
+        $operationType = match (strtoupper($requestMethod)) {
+            'GET' => OperationType::read(),
+            'POST' => OperationType::create(),
+            'PUT', 'PATCH' => OperationType::update(),
+            'DELETE' => OperationType::delete(),
+            default => OperationType::read(),
+        };
 
-        return OperationType::write();
+        return $operationType;
     }
 }

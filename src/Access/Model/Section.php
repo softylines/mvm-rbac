@@ -6,6 +6,7 @@ namespace Odiseo\SyliusRbacPlugin\Access\Model;
 
 final class Section
 {
+    public const DASHBOARD = 'dashboard';
     public const CATALOG = 'catalog';
     public const PRODUCTS = 'products'; 
     public const ATTRIBUTES = 'attributes';
@@ -34,9 +35,23 @@ final class Section
     public const SHIPPING = 'shipping';
     public const PAYMENTS = 'payments';
     public const ORDERS = 'orders';
+    public const ADMINISTRATORS = 'administrators_management';
     public const CUSTOMER = 'customers';
+    public const PRODUCT_LISTINGS = 'product_listings';
+    public const VENDOR = 'vendor';
+    public const SETTLEMENT = 'settlement';
+    public const VIRTUAL_WALLET = 'virtual_wallet';
+    public const MESSAGES = 'messages';
+    public const MESSAGES_CATEGORY = 'messages_category';
     private string $type;
 
+    public static function dashboard(): self{
+        return new self(self::DASHBOARD);
+    }   
+    public static function administrators(): self
+    {
+        return new self(self::ADMINISTRATORS);
+    }
     public static function catalog(): self
     {
         return new self(self::CATALOG);
@@ -157,6 +172,30 @@ final class Section
     public static function orders(): self
     {
         return new self(self::ORDERS);
+    }   
+    public static function productListings(): self
+    {
+        return new self(self::PRODUCT_LISTINGS);
+    }
+    public static function vendor(): self
+    {
+        return new self(self::VENDOR);
+    }
+    public static function settlement(): self
+    {
+        return new self(self::SETTLEMENT);
+    }
+    public static function virtualWallet(): self
+    {
+        return new self(self::VIRTUAL_WALLET);
+    }
+    public static function messages(): self
+    {
+        return new self(self::MESSAGES);
+    }
+    public static function messagesCategory(): self
+    {
+        return new self(self::MESSAGES_CATEGORY);
     }
     public static function ofType(string $type): self
     {

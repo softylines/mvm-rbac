@@ -16,85 +16,93 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
 {
     public function canAccessSection(AdminUserInterface $admin, AccessRequest $accessRequest): bool
     {
-        if ($admin instanceof AdministrationRoleAwareInterface) {
-            $administrationRole = $admin->getAdministrationRole();
-            Assert::notNull($administrationRole);
-    
-            $sectionType = $accessRequest->section()->__toString();
-            if ($sectionType === 'products_management') {
-                return $administrationRole->hasPermission(
-                    Permission::productsManagement([OperationType::read()])
-                );
-            }
-            
+        if (!$admin instanceof AdministrationRoleAwareInterface) {
+            return false;
+        }
 
-            if ($sectionType === 'attributes_management') {
-                return $administrationRole->hasPermission(
-                    Permission::attributesManagement([OperationType::read()])
-                );
-            }
-            
+        $administrationRole = $admin->getAdministrationRole();
+        if ($administrationRole === null) {
+            return false;
+        }
 
-            if ($sectionType === 'taxons_management') {
-                return $administrationRole->hasPermission(
-                    Permission::taxonsManagement([OperationType::read()])
-                );
-            }
-    
 
-            foreach ($administrationRole->getPermissions() as $permission) {
-                if ($this->getSectionForPermission($permission)->equals($accessRequest->section())) {
-                    if (OperationType::READ === $accessRequest->operationType()->__toString()) {
-                        return true;
-                    }
-                    return $this->canWriteAccess($permission);
+        /** @var Permission $permission */
+        foreach ($administrationRole->getPermissions() as $permission) {
+            if ($permission === null) {
+                continue;
+            }
+
+            // Direct match - permission type matches section exactly
+            if ($permission->type() === $accessRequest->section()->__toString()) {
+                $requestedOperation = $accessRequest->operationType()->__toString();
+                $grantedOperations = array_map(
+                    fn(OperationType $type) => $type->__toString(),
+                    $permission->operationTypes()
+                );
+
+
+                // Special handling for marketplace sections - strict operation type checking
+                if (str_starts_with($permission->type(), 'product_listings') ||
+                    str_starts_with($permission->type(), 'vendor') ||
+                    str_starts_with($permission->type(), 'settlement') ||
+                    str_starts_with($permission->type(), 'virtual_wallet') ||
+                    str_starts_with($permission->type(), 'messages') ||
+                    str_starts_with($permission->type(), 'messages_category')) {
+                    
+                    $hasAccess = in_array($requestedOperation, $grantedOperations, true);
+                    return $hasAccess;
                 }
+
+                // For non-marketplace sections, maintain existing behavior
+                $hasAccess = in_array($requestedOperation, $grantedOperations, true);
+                return $hasAccess;
             }
         }
-    
+
         return false;
     }
 
-    private function getSectionForPermission(Permission $permission): Section
-    {
-        return match (true) {
-          //  $permission->equals(Permission::configuration()) => Section::configuration(),
-            $permission->equals(Permission::channelsManagement()) => Section::channels(),
-            $permission->equals(Permission::countriesManagement()) => Section::countries(),
-            $permission->equals(Permission::zonesManagement()) => Section::zones(),
-            $permission->equals(Permission::currenciesManagement()) => Section::currencies(),
-            $permission->equals(Permission::localesManagement()) => Section::locales(),
-            $permission->equals(Permission::shippingCategoriesManagement()) => Section::shippingCategories(),
-            $permission->equals(Permission::shippingMethodsManagement()) => Section::shippingMethods(),
-            $permission->equals(Permission::paymentMethodsManagement()) => Section::paymentMethods(),
-            $permission->equals(Permission::exchangeRatesManagement()) => Section::exchangeRates(),
-            $permission->equals(Permission::taxRatesManagement()) => Section::taxRates(),
-            $permission->equals(Permission::taxCategoriesManagement()) => Section::taxCategories(),
-         //   $permission->equals(Permission::catalogManagement()) => Section::catalog(),
-           // $permission->equals(Permission::marketingManagement()) => Section::marketing(),
-            $permission->equals(Permission::ProductReviews()) => Section::productReviews(),
-            $permission->equals(Permission::promotions()) => Section::promotions(),
-            $permission->equals(Permission::catalogPromotions()) => Section::catalogPromotions(),
-            $permission->equals(Permission::customerManagement()) => Section::customers(),
-           // $permission->equals(Permission::salesManagement()) => Section::sales(),
-            $permission->equals(Permission::shippingManagement()) => Section::shipping(),
-            $permission->equals(Permission::paymentsManagement()) => Section::payments(),
-            $permission->equals(Permission::ordersManagement()) => Section::orders(),
-            $permission->equals(Permission::productsManagement()) => Section::products(),
-            $permission->equals(Permission::attributesManagement()) => Section::attributes(),
-            $permission->equals(Permission::taxonsManagement()) => Section::taxons(),
-            $permission->equals(Permission::inventoryManagement()) => Section::inventory(),
-            $permission->equals(Permission::optionsManagement()) => Section::options(),
-            $permission->equals(Permission::associationTypesManagement()) => Section::associationTypes(),
-            default => Section::ofType($permission->type()),
-        };
-    }
-
-    private function canWriteAccess(Permission $permission): bool
+    private function canReadAccess(Permission $permission): bool
     {
         /** @var OperationType $operationType */
         foreach ($permission->operationTypes() as $operationType) {
-            if (OperationType::WRITE === $operationType->__toString()) {
+            if (OperationType::READ === $operationType->__toString()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canCreateAccess(Permission $permission): bool
+    {
+        /** @var OperationType $operationType */
+        foreach ($permission->operationTypes() as $operationType) {
+            if (OperationType::CREATE === $operationType->__toString()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canUpdateAccess(Permission $permission): bool
+    {
+        /** @var OperationType $operationType */
+        foreach ($permission->operationTypes() as $operationType) {
+            if (OperationType::UPDATE === $operationType->__toString()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function canDeleteAccess(Permission $permission): bool
+    {
+        /** @var OperationType $operationType */
+        foreach ($permission->operationTypes() as $operationType) {
+            if (OperationType::DELETE === $operationType->__toString()) {
                 return true;
             }
         }

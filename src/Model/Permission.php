@@ -8,7 +8,8 @@ use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Webmozart\Assert\Assert;
 
 final class Permission implements PermissionInterface
-{
+{public const DASHBOARD_PERMISSION = 'dashboard';
+    public const ADMINISTRATORS_MANAGEMENT_PERMISSION = 'administrators_management';
     public const CATALOG_MANAGEMENT_PERMISSION = 'catalog_management';
     public const PRODUCTS_MANAGEMENT_PERMISSION = 'products_management';
     public const ATTRIBUTES_MANAGEMENT_PERMISSION ='attributes_management';
@@ -39,6 +40,13 @@ final class Permission implements PermissionInterface
     public const PAYMENTS_MANAGEMENT_PERMISSION = 'payments_management';    
     public const ORDERS_MANAGEMENT_PERMISSION = 'orders_management';
     public const OPTIONS_PERMISSION = 'options';
+    //MarketPlace
+    public const PRODUCT_LISTINGS_PERMISSION = 'product_listings';
+    public const VENDOR_PERMISSION = 'vendor';
+    public const SETTLEMENT_PERMISSION = 'settlement';
+    public const VIRTUAL_WALLET_PERMISSION = 'virtual_wallet';
+    public const MESSAGES_PERMISSION = 'messages';
+    public const MESSAGES_CATEGORY_PERMISSION = 'messages_category';
     private string $type;
 
     private array $operationTypes;
@@ -47,6 +55,10 @@ final class Permission implements PermissionInterface
     //{
     //    return new self(self::CATALOG_MANAGEMENT_PERMISSION, $operationTypes);
     //}
+    public static function dashboard(array $operationTypes = []): self 
+    {
+        return new self(self::DASHBOARD_PERMISSION, $operationTypes);
+    }
     public static function productsManagement(array $operationTypes = []): self
     {
         return new self(self::PRODUCTS_MANAGEMENT_PERMISSION, $operationTypes);
@@ -159,32 +171,137 @@ final class Permission implements PermissionInterface
     {
         return new self(self::ORDERS_MANAGEMENT_PERMISSION, $operationTypes);
     }
+    //MarketPlace
+    public static function productListings(array $operationTypes = []): self
+    {
+        return new self(self::PRODUCT_LISTINGS_PERMISSION, $operationTypes);
+    }
+    public static function vendor(array $operationTypes = []): self
+    {
+        return new self(self::VENDOR_PERMISSION, $operationTypes);
+    }
+    public static function settlement(array $operationTypes = []): self
+    {
+        return new self(self::SETTLEMENT_PERMISSION, $operationTypes);
+    }
+    public static function virtualWallet(array $operationTypes = []): self
+    {
+        return new self(self::VIRTUAL_WALLET_PERMISSION, $operationTypes);
+    }
+    public static function messages(array $operationTypes = []): self
+    {
+        return new self(self::MESSAGES_PERMISSION, $operationTypes);
+    }
+    public static function messagesCategory(array $operationTypes = []): self
+    {
+        return new self(self::MESSAGES_CATEGORY_PERMISSION, $operationTypes);
+    }
     public static function ofType(string $type, array $operationTypes = []): self
     {
-        return new self($type, $operationTypes);
+        return new self($type, array_map(function (string $operationType): OperationType {
+            return new OperationType($operationType);
+        }, $operationTypes));
+    }
+    public static function fromArray(array $data): self
+    {
+        if (!isset($data['type'])) {
+            throw new \InvalidArgumentException('Missing type field in data array');
+        }
+
+        // Handle case where operation_types might not be set
+        if (!isset($data['operation_types']) || !is_array($data['operation_types'])) {
+            // For marketplace sections, only grant READ by default
+            if (in_array($data['type'], [
+                self::PRODUCT_LISTINGS_PERMISSION,
+                self::VENDOR_PERMISSION,
+                self::SETTLEMENT_PERMISSION,
+                self::VIRTUAL_WALLET_PERMISSION,
+                self::MESSAGES_PERMISSION,
+                self::MESSAGES_CATEGORY_PERMISSION,
+            ], true)) {
+                return new self($data['type'], [
+                    new OperationType(OperationType::READ),
+                ]);
+            }
+
+            return new self($data['type'], [
+                new OperationType(OperationType::READ),
+                new OperationType(OperationType::CREATE),
+                new OperationType(OperationType::UPDATE),
+                new OperationType(OperationType::DELETE)
+            ]);
+        }
+
+        $operationTypes = array_map(function (string $operationType): OperationType {
+            return new OperationType($operationType);
+        }, $data['operation_types']);
+
+        return new self(
+            $data['type'],
+            $operationTypes
+        );
     }
 
     public function serialize(): string
     {
-        /** @var string $serializedPermission */
-        $serializedPermission = json_encode([
+        $data = [
             'type' => $this->type(),
             'operation_types' => array_map(function (OperationType $operationType): string {
                 return $operationType->__toString();
-            }, $this->operationTypes()),
-        ]);
+            }, $this->operationTypes),
+        ];
 
-        return $serializedPermission;
+        $serialized = json_encode($data);
+        if ($serialized === false) {
+            throw new \RuntimeException('Failed to serialize permission data');
+        }
+
+        return $serialized;
     }
 
     public static function unserialize(string $serialized): self
     {
-        /** @var array $data */
+        // Handle legacy format where permission might be just a string type
+        if (!str_contains($serialized, '{')) {
+            $type = $serialized;
+            // For marketplace sections, only grant READ by default
+            if (in_array($type, [
+                self::PRODUCT_LISTINGS_PERMISSION,
+                self::VENDOR_PERMISSION,
+                self::SETTLEMENT_PERMISSION,
+                self::VIRTUAL_WALLET_PERMISSION,
+                self::MESSAGES_PERMISSION,
+                self::MESSAGES_CATEGORY_PERMISSION,
+            ], true)) {
+                return new self($type, [
+                    new OperationType(OperationType::READ),
+                ]);
+            }
+
+            // For other sections, maintain backward compatibility
+            return new self($type, [
+                new OperationType(OperationType::READ),
+                new OperationType(OperationType::CREATE),
+                new OperationType(OperationType::UPDATE),
+                new OperationType(OperationType::DELETE)
+            ]);
+        }
+
         $data = json_decode($serialized, true);
 
-        return new self($data['type'], array_map(function (string $operationType): OperationType {
-            return new OperationType($operationType);
-        }, $data['operation_types']));
+        if (!is_array($data)) {
+            throw new \InvalidArgumentException('Invalid serialized data format');
+        }
+
+        if (!isset($data['type']) || !isset($data['operation_types'])) {
+            throw new \InvalidArgumentException('Missing required fields in serialized data');
+        }
+
+        if (!is_array($data['operation_types'])) {
+            throw new \InvalidArgumentException('Operation types must be an array');
+        }
+
+        return self::fromArray($data);
     }
 
     private function __construct(string $type, array $operationTypes = [])
@@ -198,7 +315,9 @@ final class Permission implements PermissionInterface
             }, $operationTypes),
             [
                 OperationType::read()->__toString(),
-                OperationType::write()->__toString(),
+                OperationType::create()->__toString(),
+                OperationType::update()->__toString(),
+                OperationType::delete()->__toString(),
             ],
         );
 

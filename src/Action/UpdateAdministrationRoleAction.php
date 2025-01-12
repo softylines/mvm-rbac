@@ -52,7 +52,9 @@ final class UpdateAdministrationRoleAction
 
                 if (!isset($newPermissions['rbac']) || 
                     !isset($newPermissions['rbac'][OperationType::READ]) || 
-                    !isset($newPermissions['rbac'][OperationType::WRITE])) {
+                    !isset($newPermissions['rbac'][OperationType::CREATE]) ||
+                    !isset($newPermissions['rbac'][OperationType::UPDATE]) ||
+                    !isset($newPermissions['rbac'][OperationType::DELETE])) {
                     
                         $flashBag->add('error', "odiseo_sylius_rbac_plugin.configurator_rbac_permission_denied");  
             return new RedirectResponse(

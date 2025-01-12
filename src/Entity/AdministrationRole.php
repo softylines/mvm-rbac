@@ -35,7 +35,22 @@ class AdministrationRole implements AdministrationRoleInterface
 
     public function addPermission(PermissionInterface $permission): void
     {
-        $this->permissions[$permission->type()] = $permission->serialize();
+        if ($permission === null) {
+            return;
+        }
+
+        try {
+            $data = json_decode($permission->serialize(), true);
+            $this->permissions[$permission->type()] = $data['operation_types'] ?? [
+                OperationType::READ,
+                OperationType::CREATE,
+                OperationType::UPDATE,
+                OperationType::DELETE
+            ];
+        } catch (\Exception $e) {
+            // Skip invalid permissions
+            return;
+        }
     }
 
     public function removePermission(PermissionInterface $permission): void
@@ -50,18 +65,36 @@ class AdministrationRole implements AdministrationRoleInterface
 
     public function hasPermission(PermissionInterface $permission): bool
     {
-        return
-            isset($this->permissions[$permission->type()]) &&
-            $this->permissions[$permission->type()] === $permission->serialize()
-        ;
+        try {
+            if (!isset($this->permissions[$permission->type()])) {
+                return false;
+            }
+
+            $storedPermission = $this->permissions[$permission->type()];
+            if (is_array($storedPermission)) {
+                return Permission::fromArray(['type' => $permission->type(), 'operation_types' => $storedPermission])->equals($permission);
+            }
+            
+            return Permission::unserialize($storedPermission)->equals($permission);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     public function getPermissions(): array
     {
         $permissions = [];
-        /** @var string $permission */
-        foreach ($this->permissions as $permission) {
-            $permissions[] = Permission::unserialize($permission);
+        foreach ($this->permissions as $type => $permission) {
+            try {
+                if (is_array($permission)) {
+                    $permissions[] = Permission::fromArray(['type' => $type, 'operation_types' => $permission]);
+                } else {
+                    $permissions[] = Permission::unserialize($permission);
+                }
+            } catch (\Exception $e) {
+                // Skip invalid permissions
+                continue;
+            }
         }
 
         return $permissions;

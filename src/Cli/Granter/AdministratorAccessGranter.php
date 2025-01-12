@@ -39,7 +39,7 @@ final class AdministratorAccessGranter implements AdministratorAccessGranterInte
             $administrationRole->addPermission(
                 Permission::ofType(
                     $section,
-                    [OperationType::read(), OperationType::write()],
+                    [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
                 ),
             );
         }

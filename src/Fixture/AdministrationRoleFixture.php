@@ -30,7 +30,12 @@ class AdministrationRoleFixture extends AbstractFixture implements FixtureInterf
 
         foreach ($options['permissions'] as $permissionName) {
             $administrationRole
-                ->addPermission(Permission::ofType($permissionName, [OperationType::read(), OperationType::write()]))
+                ->addPermission(Permission::ofType($permissionName, [
+                    OperationType::read(),
+                    OperationType::create(),
+                    OperationType::update(),
+                    OperationType::delete(),
+                ]))
             ;
         }
 

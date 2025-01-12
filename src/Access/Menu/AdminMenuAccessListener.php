@@ -101,7 +101,12 @@ final class AdminMenuAccessListener
                 $configuration->removeChild('zones');
             }
         }   
-
+        if($this->hasAdminNoAccessToSection($adminUser, Section::administrators())){
+            $configuration = $menu->getChildren()['configuration'] ?? null;
+            if ($configuration) {
+                $configuration->removeChild('administrators');
+            }
+        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::currencies())) {
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
@@ -206,6 +211,43 @@ final class AdminMenuAccessListener
                 $sales->removeChild('orders');
             }
         }
+        //MarketPlace
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::productListings())) {
+         $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('open_marketplace_product_listings');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::vendor())) {
+            $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('vendors');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::settlement())) {
+            $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('settlement');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::virtualWallet())) {
+            $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('virtual_wallet');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::messages())) {
+            $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('conversations');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::messagesCategory())) {
+            $marketplace = $menu->getChildren()['marketplace'] ?? null;
+            if ($marketplace) {
+                $marketplace->removeChild('conversations_category');
+            }
+        }
         /** @var string $customSection */
         foreach (array_keys($this->configuration['custom']) as $customSection) {
             if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {
@@ -216,9 +258,14 @@ final class AdminMenuAccessListener
 
     private function hasAdminNoAccessToSection(AdminUserInterface $adminUser, Section $section): bool
     {
-        return !$this->accessChecker->canAccessSection(
-            $adminUser,
-            new AccessRequest($section, OperationType::read()),
-        );
+        try {
+            return !$this->accessChecker->canAccessSection(
+                $adminUser,
+                new AccessRequest($section, OperationType::read()),
+            );
+        } catch (\Exception $e) {
+            // If there's any error checking permissions, deny access by default
+            return true;
+        }
     }
 }
