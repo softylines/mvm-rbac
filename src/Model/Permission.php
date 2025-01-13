@@ -59,6 +59,10 @@ final class Permission implements PermissionInterface
     {
         return new self(self::DASHBOARD_PERMISSION, $operationTypes);
     }
+    public static function administratorsManagement(array $operationTypes = []): self
+    {
+        return new self(self::ADMINISTRATORS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
     public static function productsManagement(array $operationTypes = []): self
     {
         return new self(self::PRODUCTS_MANAGEMENT_PERMISSION, $operationTypes);

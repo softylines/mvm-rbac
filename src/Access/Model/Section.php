@@ -7,36 +7,35 @@ namespace Odiseo\SyliusRbacPlugin\Access\Model;
 final class Section
 {
     public const DASHBOARD = 'dashboard';
-    public const CATALOG = 'catalog';
-    public const PRODUCTS = 'products'; 
-    public const ATTRIBUTES = 'attributes';
-    public const INVENTORY = 'inventory';
-    public const TAXONS = 'taxons';
+    public const PRODUCTS = 'products_management'; 
+    public const ATTRIBUTES = 'attributes_management';
+    public const INVENTORY = 'inventory_management';
+    public const TAXONS = 'taxons_management';
     public const OPTIONS = 'options';
-    public const ASSOCIATION_TYPES='association_types';
+    public const ASSOCIATION_TYPES='association_types_management';
     public const CONFIGURATION = 'configuration';
-    public const CHANNELS = 'channels';
-    public const COUNTRIES = 'countries';
-    public const ZONES = 'zones';
-    public const CURRENCIES = 'currencies';
-    public const LOCALES = 'locales';
-    public const SHIPPING_CATEGORIES = 'shipping_categories';
-    public const SHIPPING_METHODS = 'shipping_methods';
-    public const PAYMENT_METHODS = 'payment_methods';
-    public const EXCHANGE_RATES = 'exchange_rates';
-    public const TAX_RATES = 'tax_rates';   
-    public const TAX_CATEGORIES = 'tax_categories'; 
+    public const CHANNELS = 'channels_management';
+    public const COUNTRIES = 'countries_management';
+    public const ZONES = 'zones_management';
+    public const CURRENCIES = 'currencies_management';
+    public const LOCALES = 'locales_management';
+    public const SHIPPING_CATEGORIES = 'shipping_categories_management';
+    public const SHIPPING_METHODS = 'shipping_methods_management';
+    public const PAYMENT_METHODS = 'payment_methods_management';
+    public const EXCHANGE_RATES = 'exchange_rates_management';
+    public const TAX_RATES = 'tax_rates_management';   
+    public const TAX_CATEGORIES = 'tax_categories_management'; 
     public const CUSTOMERS = 'customers';
     public const MARKETING = 'marketing';
     public const PRODUCT_REVIEWS = 'product_reviews';
     public const PROMOTIONS = 'promotions';
     public const CATALOG_PROMOTIONS = 'catalog_promotions';
-    public const SALES = 'sales';
-    public const SHIPPING = 'shipping';
-    public const PAYMENTS = 'payments';
-    public const ORDERS = 'orders';
+    public const SALES = 'sales_management';
+    public const SHIPPING = 'shipping_management';
+    public const PAYMENTS = 'payments_management';
+    public const ORDERS = 'orders_management';
     public const ADMINISTRATORS = 'administrators_management';
-    public const CUSTOMER = 'customers';
+    public const CUSTOMER = 'customers_management';
     public const PRODUCT_LISTINGS = 'product_listings';
     public const VENDOR = 'vendor';
     public const SETTLEMENT = 'settlement';
@@ -52,11 +51,6 @@ final class Section
     {
         return new self(self::ADMINISTRATORS);
     }
-    public static function catalog(): self
-    {
-        return new self(self::CATALOG);
-    }
-
     public static function configuration(): self
     {
         return new self(self::CONFIGURATION);
