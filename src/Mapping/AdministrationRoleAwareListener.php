@@ -55,13 +55,24 @@ final class AdministrationRoleAwareListener implements EventSubscriber
             return;
         }
 
-        $metadata->mapManyToOne([
-            'fieldName' => 'administrationRole',
+        $metadata->mapManyToMany([
+            'fieldName' => 'administrationRoles',
             'targetEntity' => $administrationRoleMetadata->getClass('model'),
-            'joinColumns' => [
-                [
-                    'name' => 'administration_role_id',
-                    'referencedColumnName' => 'id',
+            'joinTable' => [
+                'name' => 'sylius_admin_user_administration_roles',
+                'joinColumns' => [
+                    [
+                        'name' => 'admin_user_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'CASCADE',
+                    ],
+                ],
+                'inverseJoinColumns' => [
+                    [
+                        'name' => 'administration_role_id',
+                        'referencedColumnName' => 'id',
+                        'onDelete' => 'CASCADE',
+                    ],
                 ],
             ],
         ]);

@@ -38,21 +38,92 @@ odiseo_sylius_rbac_plugin_admin:
 <?php
 // src/Entity/User/AdminUser.php
 
-// ...
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
-use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareTrait;
-use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
+use Sylius\Component\User\Model\User;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="sylius_admin_user")
- */
-class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterface
+class AdminUser extends User implements AdminUserInterface, EquatableInterface, AdministrationRoleAwareInterface
 {
-    use AdministrationRoleAwareTrait;
+    /** @var string|null */
+    protected $firstName;
 
-    // ...
+    /** @var string|null */
+    protected $lastName;
+
+    /** @var string|null */
+    protected $localeCode;
+
+    /** @var ImageInterface|null */
+    protected $avatar;
+
+    /** @var Collection<int, AdministrationRoleInterface> */
+    protected Collection $administrationRoles;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->roles = [AdminUserInterface::DEFAULT_ADMIN_ROLE];
+        $this->administrationRoles = new ArrayCollection();
+    }
+
+    //..
+
+    /**
+     * @return Collection<int, AdministrationRoleInterface>
+     */
+    public function getAdministrationRoles(): Collection
+    {
+        return $this->administrationRoles;
+    }
+
+    public function addAdministrationRole(AdministrationRoleInterface $role): void
+    {
+        if (!$this->administrationRoles->contains($role)) {
+            $this->administrationRoles->add($role);
+            $role->addAdminUser($this);
+        }
+    }
+
+    public function removeAdministrationRole(AdministrationRoleInterface $role): void
+    {
+        if ($this->administrationRoles->contains($role)) {
+            $this->administrationRoles->removeElement($role);
+            $role->removeAdminUser($this);
+        }
+    }
+
+    public function hasAdministrationRole(AdministrationRoleInterface $role): bool
+    {
+        return $this->administrationRoles->contains($role);
+    }
+
+    public function getAdministrationRole(): ?AdministrationRoleInterface
+    {
+        return $this->administrationRoles->first() ?: null;
+    }
+
+    public function setAdministrationRole(?AdministrationRoleInterface $role): void
+    {
+        $this->administrationRoles->clear();
+        if (null !== $role) {
+            $this->addAdministrationRole($role);
+        }
+    }
+
+    public function getRoles(): array
+    {
+        $roles = parent::getRoles();
+
+        foreach ($this->getAdministrationRoles() as $administrationRole) {
+            $roles[] = 'ROLE_' . strtoupper($administrationRole->getName());
+        }
+
+        return array_unique($roles);
+    }
 }
 ```
 

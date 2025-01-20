@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Odiseo\SyliusRbacPlugin\Model\Permission;
 use Odiseo\SyliusRbacPlugin\Model\PermissionInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
@@ -18,6 +20,16 @@ class AdministrationRole implements AdministrationRoleInterface
 
     protected array $permissions = [];
 
+    /**
+     * @var Collection<int, AdminUserInterface>
+     */
+    protected Collection $adminUsers;
+
+    public function __construct()
+    {
+        $this->adminUsers = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -31,6 +43,30 @@ class AdministrationRole implements AdministrationRoleInterface
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function getAdminUsers(): Collection
+    {
+        return $this->adminUsers;
+    }
+
+    public function addAdminUser(AdminUserInterface $adminUser): void
+    {
+        if (!$this->adminUsers->contains($adminUser)) {
+            $this->adminUsers->add($adminUser);
+        }
+    }
+
+    public function removeAdminUser(AdminUserInterface $adminUser): void
+    {
+        if ($this->adminUsers->contains($adminUser)) {
+            $this->adminUsers->removeElement($adminUser);
+        }
+    }
+
+    public function hasAdminUser(AdminUserInterface $adminUser): bool
+    {
+        return $this->adminUsers->contains($adminUser);
     }
 
     public function addPermission(PermissionInterface $permission): void

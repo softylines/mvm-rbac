@@ -11,22 +11,37 @@ final class Version20240315112759 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Create administration roles and their many-to-many relationship with admin users';
     }
 
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE TABLE odiseo_rbac_administration_role (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, permissions JSON NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_BEFDB7615E237E06 (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET UTF8 COLLATE `UTF8_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('ALTER TABLE sylius_admin_user ADD administration_role_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE sylius_admin_user ADD CONSTRAINT FK_88D5CC4D913437BF FOREIGN KEY (administration_role_id) REFERENCES odiseo_rbac_administration_role (id)');
-        $this->addSql('CREATE INDEX IDX_88D5CC4D913437BF ON sylius_admin_user (administration_role_id)');
+        
+        $this->addSql('CREATE TABLE sylius_admin_user_administration_roles (
+            admin_user_id INT NOT NULL,
+            administration_role_id INT NOT NULL,
+            PRIMARY KEY(admin_user_id, administration_role_id)
+        ) DEFAULT CHARACTER SET UTF8 COLLATE `UTF8_unicode_ci` ENGINE = InnoDB');
+        
+        $this->addSql('ALTER TABLE sylius_admin_user_administration_roles 
+            ADD CONSTRAINT FK_ADMIN_USER_ID FOREIGN KEY (admin_user_id) 
+            REFERENCES sylius_admin_user (id) ON DELETE CASCADE');
+            
+        $this->addSql('ALTER TABLE sylius_admin_user_administration_roles 
+            ADD CONSTRAINT FK_ADMINISTRATION_ROLE_ID FOREIGN KEY (administration_role_id) 
+            REFERENCES odiseo_rbac_administration_role (id) ON DELETE CASCADE');
+            
+        $this->addSql('CREATE INDEX IDX_ADMIN_USER ON sylius_admin_user_administration_roles (admin_user_id)');
+        $this->addSql('CREATE INDEX IDX_ADMINISTRATION_ROLE ON sylius_admin_user_administration_roles (administration_role_id)');
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('ALTER TABLE sylius_admin_user DROP FOREIGN KEY FK_88D5CC4D913437BF');
+        $this->addSql('ALTER TABLE sylius_admin_user_administration_roles DROP FOREIGN KEY FK_ADMIN_USER_ID');
+        $this->addSql('ALTER TABLE sylius_admin_user_administration_roles DROP FOREIGN KEY FK_ADMINISTRATION_ROLE_ID');
+        
+        $this->addSql('DROP TABLE sylius_admin_user_administration_roles');
         $this->addSql('DROP TABLE odiseo_rbac_administration_role');
-        $this->addSql('DROP INDEX IDX_88D5CC4D913437BF ON sylius_admin_user');
-        $this->addSql('ALTER TABLE sylius_admin_user DROP administration_role_id');
     }
 }

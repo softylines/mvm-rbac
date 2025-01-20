@@ -52,6 +52,7 @@ final class UpdateAdministrationRoleHandler
             $administrationRole->addPermission($permission);
         }
 
+        // No need to update admin users relationships as they are managed by the collection
         $this->administrationRoleManager->flush();
     }
 }

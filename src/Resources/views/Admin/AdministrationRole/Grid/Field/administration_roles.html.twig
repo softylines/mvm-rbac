@@ -1,0 +1,110 @@
+{% if data is not empty %}
+    <style>
+        .ui.dropdown .menu {
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 999;
+        }
+        .ui.label {
+            margin: 2px;
+        }
+        .ui.dropdown .label {
+            cursor: pointer;
+        }
+        .roles-dropdown {
+            display: inline-block;
+        }
+        .roles-popup {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 150px;
+            cursor:pointer;
+            max-height: 200px;
+            overflow-y: auto;
+            max-height: 200px;
+            overflow: auto;
+            z-index: 10;
+            position: fixed;
+        }
+        .roles-popup.active {
+            display: block;
+        }
+        span.ui.blue.label.more-roles-trigger {
+          cursor: pointer;
+              }
+        .roles-popup .item {
+            padding: 4px 8px;
+            white-space: nowrap;
+        }
+        .roles-popup .item:hover {
+            background-color: #f8f9fa;
+            cursor: default;
+        }
+        .roles-popup::-webkit-scrollbar {
+            width: 6px;
+        }
+        .roles-popup::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .roles-popup::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 3px;
+        }
+        .roles-popup::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+
+    <div class="roles-container">
+        {% set roles = data|slice(0, 3) %}
+        {% for role in roles %}
+            <span class="ui label">{{ role.name }}</span>
+        {% endfor %}
+        
+        {% if data|length > 3 %}
+            <div class="roles-wrapper">
+                <span class="ui blue label more-roles-trigger" onclick="toggleRolesPopup(this)">
+                    +{{ data|length - 3 }} more
+                    <i class="dropdown icon"></i>
+                </span>
+                <div class="roles-popup">
+                    {% for role in data|slice(3) %}
+                        <div class="item">{{ role.name }}</div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleRolesPopup(trigger) {
+            const wrapper = trigger.closest('.roles-wrapper');
+            const popup = wrapper.querySelector('.roles-popup');
+            document.querySelectorAll('.roles-popup.active').forEach(p => {
+                if (p !== popup) p.classList.remove('active');
+            });
+            popup.classList.toggle('active');
+            const closePopup = (e) => {
+                if (!wrapper.contains(e.target)) {
+                    popup.classList.remove('active');
+                    document.removeEventListener('click', closePopup);
+                }
+            };
+            
+            document.addEventListener('click', closePopup);
+        }
+        
+        document.querySelectorAll('.roles-popup').forEach(popup => {
+            popup.addEventListener('click', (e) => e.stopPropagation());
+        });
+    </script>
+{% else %}
+    <span class="ui label">{{ 'odiseo_sylius_rbac_plugin.ui.no_sections_access'|trans }}</span>
+{% endif %}
