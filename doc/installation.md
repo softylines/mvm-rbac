@@ -72,7 +72,8 @@ class AdminUser extends User implements AdminUserInterface, EquatableInterface, 
 
     //..
 
-    /**
+    ²
+    ,,/**
      * @return Collection<int, AdministrationRoleInterface>
      */
     public function getAdministrationRoles(): Collection

@@ -38,44 +38,74 @@ final class UpdateAdministrationRoleAction
             
             $newPermissions = $request->request->all()['permissions'] ?? [];
             $currentPermissions = $administrationRole->getPermissions();
-            if ($this->security->getUser()?->getAdministrationRole()?->getName() !== 'Configurator' 
-            && $administrationRole->getName() === 'Configurator') {
-            $flashBag->add('error', 'Only administrators with Configurator role can modify Configurator permissions');
-            return new RedirectResponse(
-                $this->router->generate(
-                    'odiseo_sylius_rbac_plugin_admin_administration_role_update_view',
-                    ['id' => $request->attributes->get('id')],
-                )
-            );
-        }
-            if ($administrationRole->getName() === 'Configurator') {
 
-                if (!isset($newPermissions['rbac']) || 
-                    !isset($newPermissions['rbac'][OperationType::READ]) || 
-                    !isset($newPermissions['rbac'][OperationType::CREATE]) ||
-                    !isset($newPermissions['rbac'][OperationType::UPDATE]) ||
-                    !isset($newPermissions['rbac'][OperationType::DELETE])) {
+            $currentUser = $this->security->getUser();
+            $userRoles = $currentUser->getAdministrationRoles();
+
+            var_dump('==== DEBUG START ====');
+            var_dump([
+                'Current User ID' => $currentUser->getId(),
+                'Current User Email' => $currentUser->getEmail(),
+                'Target Role ID' => $administrationRole->getId(),
+                'Target Role Name' => $administrationRole->getName(),
+            ]);
+
+            $isTargetRoleConfigurator = strtolower($administrationRole->getName()) === 'configurator';
+            $isUserConfigurator = false;
+            
+            foreach ($userRoles as $role) {
+                var_dump('User has role: ' . $role->getName());
+                if (strtolower($role->getName()) === 'configurator') {
+                    $isUserConfigurator = true;
+                    break;
+                }
+            }
+
+            var_dump([
+                'Is Target Role Configurator' => $isTargetRoleConfigurator,
+                'Is User Configurator' => $isUserConfigurator
+            ]);
+
+
+            $currentRbacPermissions = [];
+            foreach ($currentPermissions as $permission) {
+                $reflectionClass = new \ReflectionClass($permission);
+                $typeProperty = $reflectionClass->getProperty('type');
+                $typeProperty->setAccessible(true);
+                $permissionType = $typeProperty->getValue($permission);
+
+                if ($permissionType === 'rbac') {
+                    $operationTypesProperty = $reflectionClass->getProperty('operationTypes');
+                    $operationTypesProperty->setAccessible(true);
+                    $operationTypes = $operationTypesProperty->getValue($permission);
                     
-                        $flashBag->add('error', "odiseo_sylius_rbac_plugin.configurator_rbac_permission_denied");  
-            return new RedirectResponse(
-                        $this->router->generate(
-                            'odiseo_sylius_rbac_plugin_admin_administration_role_update_view',
-                            ['id' => $request->attributes->get('id')],
-                        )
+                    $currentRbacPermissions = array_map(
+                        function($op) {
+                            $opReflection = new \ReflectionClass($op);
+                            $typeProperty = $opReflection->getProperty('type');
+                            $typeProperty->setAccessible(true);
+                            return $typeProperty->getValue($op);
+                        },
+                        $operationTypes
                     );
+                    break;
                 }
-            } else {
-                $hasCurrentRbac = false;
-                foreach ($currentPermissions as $permission) {
-                    if ($permission->type() === 'rbac') {
-                        $hasCurrentRbac = true;
-                        break;
-                    }
-                }
+            }
 
+            $newRbacPermissions = $newPermissions['rbac'] ?? [];
+            
+            var_dump([
+                'Current RBAC Permissions' => $currentRbacPermissions,
+                'New RBAC Permissions' => $newRbacPermissions
+            ]);
 
-                if ($this->security->getUser()?->getAdministrationRole()?->getName() !== 'Configurator' && $hasCurrentRbac && !isset($newPermissions['rbac'])) {
-                    $flashBag->add('error', "odiseo_sylius_rbac_plugin.configurator_rbac_permission_denied");  
+            if ($isTargetRoleConfigurator) {
+                if (!isset($newPermissions['rbac']) || 
+                    count($newRbacPermissions) < count($currentRbacPermissions) ||
+                    array_diff($currentRbacPermissions, array_keys($newRbacPermissions))) {
+                    
+                    var_dump('BLOCKED: Attempt to remove or modify Configurator RBAC permissions');
+                    $flashBag->add('error', 'odiseo_sylius_rbac_plugin.configurator_cannot_modify_own_rbac');
                     return new RedirectResponse(
                         $this->router->generate(
                             'odiseo_sylius_rbac_plugin_admin_administration_role_update_view',
@@ -83,12 +113,12 @@ final class UpdateAdministrationRoleAction
                         )
                     );
                 }
-
             }
-            
+
+            var_dump('==== DEBUG END ====');
+
             /** @var string $administrationRoleName */
             $administrationRoleName = $request->request->get('administration_role_name');
-
 
             $normalizedPermissions = $this->administrationRolePermissionNormalizer->normalize($newPermissions);
 
@@ -101,7 +131,7 @@ final class UpdateAdministrationRoleAction
             $flashBag->add('success', 'odiseo_sylius_rbac_plugin.administration_role_successfully_updated');
 
         } catch (\Exception $exception) {
-            
+            var_dump('Exception occurred: ' . $exception->getMessage());
             $flashBag->add('error', $exception->getMessage());
         }
 

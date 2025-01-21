@@ -8,3 +8,5 @@ odiseo_sylius_rbac_plugin:
   configurator_rbac_permission_denied: 'Configurator role cannot have RBAC permissions'
   Only_Configurator_role_can_modify_RBAC_permissions: 'Only Configurator role can modify RBAC permissions'
   you_have_no_access_to_dashboard: "You don't have access to the dashboard"
+  configurator_cannot_modify_own_rbac: 'Configurator cannot modify own RBAC permissions'
+  administrator_cannot_modify_configurator_rbac: 'Administrator cannot modify Configurator RBAC permissions'
