@@ -36,7 +36,10 @@ odiseo_sylius_rbac_plugin_admin:
 
 ```php
 <?php
-// src/Entity/User/AdminUser.php
+
+declare(strict_types=1);
+
+namespace Sylius\Component\Core\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -70,10 +73,70 @@ class AdminUser extends User implements AdminUserInterface, EquatableInterface, 
         $this->administrationRoles = new ArrayCollection();
     }
 
-    //..
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
 
-    ²
-    ,,/**
+    public function setFirstName(?string $firstName): void
+    {
+        $this->firstName = $firstName;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): void
+    {
+        $this->lastName = $lastName;
+    }
+
+    public function getFullName(): string
+    {
+        return trim(sprintf('%s %s', $this->firstName, $this->lastName));
+    }
+
+    public function getLocaleCode(): ?string
+    {
+        return $this->localeCode;
+    }
+
+    public function setLocaleCode(?string $code): void
+    {
+        $this->localeCode = $code;
+    }
+
+    public function getImage(): ?ImageInterface
+    {
+        return $this->avatar;
+    }
+
+    public function setImage(?ImageInterface $image): void
+    {
+        if ($image !== null) {
+            $image->setOwner($this);
+        }
+        $this->avatar = $image;
+    }
+
+    public function getAvatar(): ?ImageInterface
+    {
+        return $this->getImage();
+    }
+
+    public function setAvatar(?ImageInterface $avatar): void
+    {
+        $this->setImage($avatar);
+    }
+
+    public function isEqualTo(UserInterface $user): bool
+    {
+        return $user instanceof AdminUserInterface && $this->isEnabled() === $user->isEnabled();
+    }
+
+    /**
      * @return Collection<int, AdministrationRoleInterface>
      */
     public function getAdministrationRoles(): Collection
