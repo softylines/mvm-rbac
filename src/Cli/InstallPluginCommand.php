@@ -77,7 +77,22 @@ final class InstallPluginCommand extends Command
         if (!$existingConfiguratorRole) {
             $configuratorRole = new AdministrationRole();
             $configuratorRole->setName('Configurator');
-            foreach ($this->syliusSectionsProvider->getSections() as $section => $routes) {
+            
+            $configuratorPermissions = [
+                'rbac', 'vendor', 'options', 'messages', 'dashboard', 'promotions',
+                'settlement', 'virtual_wallet', 'product_reviews', 'product_listings',
+                'zones_management', 'messages_category', 'orders_management',
+                'taxons_management', 'catalog_promotions', 'locales_management',
+                'channels_management', 'payments_management', 'products_management',
+                'shipping_management', 'countries_management', 'customers_management',
+                'inventory_management', 'tax_rates_management', 'attributes_management',
+                'currencies_management', 'administrators_management', 'exchange_rates_management',
+                'tax_categories_management', 'payment_methods_management',
+                'shipping_methods_management', 'association_types_management',
+                'shipping_categories_management'
+            ];
+
+            foreach ($configuratorPermissions as $section) {
                 $configuratorRole->addPermission(Permission::ofType($section, [
                     OperationType::read(),
                     OperationType::create(),
@@ -85,8 +100,9 @@ final class InstallPluginCommand extends Command
                     OperationType::delete(),
                 ]));
             }
+
             $this->entityManager->persist($configuratorRole);
-            $io->text('Created Configurator role');
+            $io->text('Created Configurator role with full permissions');
         } else {
             $configuratorRole = $existingConfiguratorRole;
             $io->text('Using existing Configurator role');
