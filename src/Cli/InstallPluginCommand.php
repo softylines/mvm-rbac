@@ -4,57 +4,25 @@ declare(strict_types=1);
 
 namespace Odiseo\SyliusRbacPlugin\Cli;
 
-use Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProviderInterface;
-use Symfony\Component\Console\Application;
+use Doctrine\ORM\EntityManagerInterface;
+use Odiseo\SyliusRbacPlugin\Entity\AdministrationRole;
+use Odiseo\SyliusRbacPlugin\Model\Permission;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
+use Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider;
+use Sylius\Component\Core\Model\AdminUser;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Doctrine\DBAL\Connection;
 
 final class InstallPluginCommand extends Command
 {
-    private array $commands = [
-        [
-            'command' => 'sylius:fixtures:load',
-            'message' => 'Loads default no sections access role',
-            'parameters' => [
-                'suite' => 'default_rbac_fixtures',
-            ],
-            'interactive' => false,
-        ],
-        [
-            'command' => 'odiseo:rbac:normalize-administrators',
-            'message' => 'Assigns new, default role to all administrators in the system',
-            'parameters' => [],
-            'interactive' => false,
-        ],
-        [
-            'command' => 'odiseo:rbac:grant-access',
-            'message' => 'Grants access to given sections to specified administrator (via cli)',
-            'parameters' => [
-                'roleName' => 'Configurator',
-                // based on config.yml file and added during command's execution
-                'sections' => [],
-            ],
-            'interactive' => true,
-        ],
-        [
-            'command' => 'odiseo:rbac:grant-access-to-given-administrator',
-            'message' => 'Grants access to given sections to specified administrator (via configuration)',
-            'parameters' => [
-                'roleName' => 'Configurator',
-                // based on config.yml file and added during command's execution
-                'sections' => [],
-                'administratorEmail' => '',
-            ],
-            'interactive' => true,
-        ],
-    ];
-
     public function __construct(
-        private SyliusSectionsProviderInterface $syliusSectionsProvider,
-        private string $administratorEmail,
+        private SyliusSectionsProvider $syliusSectionsProvider,
+        private EntityManagerInterface $entityManager,
+        private string $rootAdministratorEmail,
     ) {
         parent::__construct();
     }
@@ -63,105 +31,130 @@ final class InstallPluginCommand extends Command
     {
         $this
             ->setName('odiseo:rbac:install')
-            ->setDescription('Installs RBAC plugin');
+            ->setDescription('Installs RBAC plugin with default configuration')
+            ->addOption(
+                'admin-email',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Email of the admin user to assign the configurator role'
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $outputStyle = new SymfonyStyle($input, $output);
-        $outputStyle->writeln('<info>Installing RBAC plugin...</info>');
+        $io = new SymfonyStyle($input, $output);
 
-        /**
-         * @var int $step
-         * @var array $command
-         */
-        foreach ($this->commands as $step => $command) {
-            if (!$this->shouldCommandBeExecuted($command)) {
-                continue;
-            }
+        $io->title('Installing Odiseo RBAC Plugin');
 
-            if ($this->shouldCommandBeNormalized($command)) {
-                $command = $this->normalizeCommand($command);
-            }
-
-            try {
-                $outputStyle->newLine();
-                $outputStyle->section($this->getCommandMessage($step, $command['message']));
-
-                $input = new ArrayInput($command['parameters']);
-                $input->setInteractive($command['interactive']);
-
-                /** @var Application $application */
-                $application = $this->getApplication();
-
-                $application
-                    ->find($command['command'])
-                    ->run($input, $output)
-                ;
-            } catch (\Exception $exception) {
-                $outputStyle->newLine(2);
-                $outputStyle->warning($exception->getMessage());
-            }
+        $adminEmail = $input->getOption('admin-email');
+        if (!$adminEmail) {
+            $adminEmail = $io->ask('Please enter the email of the admin user who will be assigned the configurator role');
         }
 
-        $outputStyle->newLine(2);
-        $outputStyle->success('RBAC has been successfully installed.');
-
-        return 0;
-    }
-
-    private function getCommandMessage(int $step, string $commandMessage): string
-    {
-        return sprintf(
-            'Step %d of %d. <info>%s</info>',
-            $step + 1,
-            count($this->commands),
-            $commandMessage,
-        );
-    }
-
-    private function shouldCommandBeExecuted(array $command): bool
-    {
-        $isAdministratorEmailProvided = $this->isAdministratorEmailProvided();
-
-        $isGrantAccessToGivenAdministratorCurrentCommand =
-            $this->isGrantAccessToGivenAdministratorCurrentCommand($command['command']);
-
-        $isGrantAccessCurrentCommand = $this->isGrantAccessCurrentCommand($command['command']);
-
-        return !(($isGrantAccessToGivenAdministratorCurrentCommand && !$isAdministratorEmailProvided) ||
-            ($isGrantAccessCurrentCommand && $isAdministratorEmailProvided));
-    }
-
-    private function shouldCommandBeNormalized(array $command): bool
-    {
-        return $this->isGrantAccessCurrentCommand($command['command']) ||
-            $this->isGrantAccessToGivenAdministratorCurrentCommand($command['command']);
-    }
-
-    private function normalizeCommand(array $command): array
-    {
-        $command['parameters']['sections'] = $this->syliusSectionsProvider->__invoke();
-
-        if ($this->isGrantAccessToGivenAdministratorCurrentCommand($command['command'])) {
-            $command['parameters']['administratorEmail'] = $this->administratorEmail;
+        if (!$adminEmail) {
+            $io->error('Admin email is required');
+            return Command::FAILURE;
         }
 
-        return $command;
+
+        $configuratorRole = $this->createDefaultRoles($io);
+
+        $this->assignConfiguratorRole($io, $adminEmail, $configuratorRole);
+
+        $io->success('Plugin has been installed successfully.');
+
+        return Command::SUCCESS;
     }
 
-    private function isGrantAccessToGivenAdministratorCurrentCommand(string $commandName): bool
+    private function createDefaultRoles(SymfonyStyle $io): ?AdministrationRole
     {
-        return $commandName === 'odiseo:rbac:grant-access-to-given-administrator';
+        $io->section('Creating default administration roles');
+
+        $roleRepository = $this->entityManager->getRepository(AdministrationRole::class);
+        $configuratorRole = null;
+
+        $existingConfiguratorRole = $roleRepository->findOneBy(['name' => 'Configurator']);
+        if (!$existingConfiguratorRole) {
+            $configuratorRole = new AdministrationRole();
+            $configuratorRole->setName('Configurator');
+            foreach ($this->syliusSectionsProvider->getSections() as $section => $routes) {
+                $configuratorRole->addPermission(Permission::ofType($section, [
+                    OperationType::read(),
+                    OperationType::create(),
+                    OperationType::update(),
+                    OperationType::delete(),
+                ]));
+            }
+            $this->entityManager->persist($configuratorRole);
+            $io->text('Created Configurator role');
+        } else {
+            $configuratorRole = $existingConfiguratorRole;
+            $io->text('Using existing Configurator role');
+        }
+        
+        if (!$roleRepository->findOneBy(['name' => 'No sections access'])) {
+            $noAccessRole = new AdministrationRole();
+            $noAccessRole->setName('No sections access');
+            $this->entityManager->persist($noAccessRole);
+            $io->text('Created No sections access role');
+        }
+        
+        if (!$roleRepository->findOneBy(['name' => 'Vendor'])) {
+            $vendorRole = new AdministrationRole();
+            $vendorRole->setName('Vendor');
+            
+            $vendorPermissions = [
+                'products_management' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
+                'inventory_management' => [OperationType::read(), OperationType::update()],
+                'orders_management' => [OperationType::read()],
+                'product_listings' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
+                'messages' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
+                'virtual_wallet' => [OperationType::read()]
+            ];
+
+            foreach ($vendorPermissions as $section => $operations) {
+                $vendorRole->addPermission(Permission::ofType($section, $operations));
+            }
+
+            $this->entityManager->persist($vendorRole);
+            $io->text('Created Vendor role');
+        }
+
+        $this->entityManager->flush();
+
+        $io->success('Default administration roles have been processed');
+        
+        return $configuratorRole;
     }
 
-    private function isGrantAccessCurrentCommand(string $commandName): bool
+    private function assignConfiguratorRole(SymfonyStyle $io, string $adminEmail, ?AdministrationRole $configuratorRole): void
     {
-        return $commandName === 'odiseo:rbac:grant-access';
-    }
+        if (null === $configuratorRole) {
+            $io->error('Configurator role not found');
+            return;
+        }
 
-    private function isAdministratorEmailProvided(): bool
-    {
-        return $this->administratorEmail !== '';
+        $connection = $this->entityManager->getConnection();
+        
+        $adminUser = $this->entityManager->getRepository(AdminUser::class)->findOneBy(['email' => $adminEmail]);
+        
+        if (!$adminUser) {
+            $io->error(sprintf('Admin user with email %s not found', $adminEmail));
+            return;
+        }
+
+        try {
+            $connection->executeStatement(
+                'INSERT INTO sylius_admin_user_administration_roles (admin_user_id, administration_role_id) VALUES (:userId, :roleId)',
+                [
+                    'userId' => $adminUser->getId(),
+                    'roleId' => $configuratorRole->getId(),
+                ]
+            );
+
+            $io->success(sprintf('Successfully assigned Configurator role to admin user %s', $adminEmail));
+        } catch (\Exception $e) {
+            $io->error(sprintf('Failed to assign role: %s', $e->getMessage()));
+        }
     }
 }

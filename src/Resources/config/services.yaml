@@ -14,15 +14,16 @@ services:
     class: Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactory
     decorates: odiseo_sylius_rbac_plugin.factory.administration_role
     arguments:
-      - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role.inner'
+      - "@odiseo_sylius_rbac_plugin.custom_factory.administration_role.inner"
 
   Odiseo\SyliusRbacPlugin\Provider\AdminPermissionsProvider:
     arguments:
-      - '%odiseo_sylius_rbac_plugin.configuration%'
+      - "%odiseo_sylius_rbac_plugin.configuration%"
 
   Odiseo\SyliusRbacPlugin\Provider\SyliusSectionsProvider:
     arguments:
-      - '%odiseo_sylius_rbac_plugin.configuration%'
+      - "%odiseo_sylius_rbac_plugin.configuration%"
+    public: true
 
   Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface:
     class: Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker
@@ -33,11 +34,11 @@ services:
   Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface:
     class: Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreator
     arguments:
-      - '%odiseo_sylius_rbac_plugin.configuration%'
+      - "%odiseo_sylius_rbac_plugin.configuration%"
 
   Odiseo\SyliusRbacPlugin\Cli\Granter\AdministratorAccessGranter:
     arguments:
-      - '@sylius.repository.admin_user'
-      - '@odiseo_sylius_rbac_plugin.repository.administration_role'
-      - '@doctrine.orm.entity_manager'
-      - '@odiseo_sylius_rbac_plugin.custom_factory.administration_role'
+      - "@sylius.repository.admin_user"
+      - "@odiseo_sylius_rbac_plugin.repository.administration_role"
+      - "@doctrine.orm.entity_manager"
+      - "@odiseo_sylius_rbac_plugin.custom_factory.administration_role"
