@@ -1,68 +1,72 @@
 odiseo_sylius_rbac_plugin:
   ui:
     errors:
-      cannot_remove_rbac: 'The RBAC permission cannot be removed from the Configurator role as it is required.'
-    access: 'Access'
-    administration_role: 'Administration role'
-    administration_roles: 'Administration roles'
-    edit_administration_role: 'Edit administration role'
-    new_administration_role: 'New administration role'
+      cannot_remove_rbac: "The RBAC permission cannot be removed from the Configurator role as it is required."
+    access: "Access"
+    administration_role: "Administration role"
+    administration_roles: "Administration roles"
+    edit_administration_role: "Edit administration role"
+    new_administration_role: "New administration role"
     permission:
-      catalog_management: 'Catalog management'
-      configuration: 'Configuration'
-      customers_management: 'Customers management'
-      marketing_management: 'Marketing management'
-      options: 'Options'
-      association_types_management: 'Association types management'
-      dashboard: 'Dashboard'
-      zones_management: 'Zones management'
-      currencies_management: 'Currencies management'
-      locales_management: 'Locales management'
-      shipping_categories_management: 'Shipping categories management'
-      shipping_methods_management: 'Shipping methods management'
-      payment_methods_management: 'Payment methods management'
-      exchange_rates_management: 'Exchange rates management'
-      tax_rates_management: 'Tax rates management'
-      tax_categories_management: 'Tax categories management'
-      channels_management: 'Channels management'
-      product_reviews_management: 'Product reviews management'
-      promotions: 'Promotions management'
-      catalog_promotions: 'Catalog promotions management'
-      shipping_management: 'Shipping management'
-      payments_management: 'Payments management'
-      orders_management: 'Orders management'
-      products_management: 'Products management'
-      taxons_management: 'Taxons management'
-      associations_management: 'Associations management'
-      inventory_management: 'Inventory management'
-      attributes_management: 'Attributes management'
-      product_listings: 'Product listings management'
-      vendor: 'Vendor management'
-      settlement: 'Settlement management'
-      virtual_wallet: 'Virtual wallet management'
-      messages: 'Messages management'
-      administrators_management: 'Administrators management'
-      messages_category: 'Messages category management'
+      catalog_management: "Catalog management"
+      configuration: "Configuration"
+      customers_management: "Customers management"
+      marketing_management: "Marketing management"
+      options: "Options"
+      association_types_management: "Association types management"
+      dashboard: "Dashboard"
+      zones_management: "Zones management"
+      currencies_management: "Currencies management"
+      locales_management: "Locales management"
+      shipping_categories_management: "Shipping categories management"
+      shipping_methods_management: "Shipping methods management"
+      payment_methods_management: "Payment methods management"
+      exchange_rates_management: "Exchange rates management"
+      tax_rates_management: "Tax rates management"
+      tax_categories_management: "Tax categories management"
+      channels_management: "Channels management"
+      product_reviews_management: "Product reviews management"
+      promotions: "Promotions management"
+      catalog_promotions: "Catalog promotions management"
+      shipping_management: "Shipping management"
+      payments_management: "Payments management"
+      orders_management: "Orders management"
+      products_management: "Products management"
+      taxons_management: "Taxons management"
+      associations_management: "Associations management"
+      inventory_management: "Inventory management"
+      attributes_management: "Attributes management"
+      product_listings: "Product listings management"
+      vendor: "Vendor management"
+      settlement: "Settlement management"
+      virtual_wallet: "Virtual wallet management"
+      messages: "Messages management"
+      administrators_management: "Administrators management"
+      messages_category: "Messages category management"
       operation_type:
-        read: 'Read'
-        create: 'Create'
-        update: 'Update'
-        delete: 'Delete'
-        write: 'Write'
-      rbac: 'RBAC'
-      sales_management: 'Sales management'
-      product_reviews: 'Products reviews management'
-      countries_management: 'Countries management'
-      catalog: 'Catalog'
-      customers: 'Customers'
-      marketing: 'Marketing'
-      sales: 'Sales'
-    permissions: 'Permissions'
-    rbac: 'RBAC'
-    rbac_role: 'RBAC role'
+        read: "Read"
+        create: "Create"
+        update: "Update"
+        delete: "Delete"
+        write: "Write"
+      rbac: "RBAC"
+      sales_management: "Sales management"
+      product_reviews: "Products reviews management"
+      countries_management: "Countries management"
+      catalog: "Catalog"
+      customers: "Customers"
+      marketing: "Marketing"
+      sales: "Sales"
+    permissions: "Permissions"
+    rbac: "RBAC"
+    rbac_role: "RBAC role"
     administration_role_deleted: Administration role has been deleted
     administration_role_not_found: Administration role with id %administration_role_id% does not exist
     administration_role_name_not_found: Administration role name not found
     administration_role_name_already_exists: Administration role name already exists
     administration_role_created: Administration role has been created
     administration_role_updated: Administration role has been updated
+    you_have_no_access_to_this_section: "You don't have access to this section"
+    no_sections_access: "You don't have access to any section"
+    access_denied: "Access Denied"
+    return_to_dashboard: "Return to Dashboard"

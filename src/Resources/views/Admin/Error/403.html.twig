@@ -1,0 +1,22 @@
+{% extends '@SyliusAdmin/layout.html.twig' %}
+
+{% block title %}{{ 'sylius.ui.access_denied'|trans }} {{ parent() }}{% endblock %}
+
+{% block content %}
+<div class="ui segment center aligned">
+    <div class="ui icon message negative">
+        <i class="lock icon"></i>
+        <div class="content">
+            <div class="header">
+                {{ 'odiseo_sylius_rbac_plugin.ui.access_denied'|trans }}
+            </div>
+            <p>{{ 'odiseo_sylius_rbac_plugin.ui.you_have_no_access_to_this_section'|trans }}</p>
+        </div>
+    </div>
+    
+    <a href="{{ path('sylius_admin_dashboard') }}" class="ui big primary button">
+        <i class="home icon"></i>
+        {{ 'odiseo_sylius_rbac_plugin.ui.return_to_dashboard'|trans }}
+    </a>
+</div>
+{% endblock %} 

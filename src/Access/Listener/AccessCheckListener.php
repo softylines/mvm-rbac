@@ -12,6 +12,7 @@ use Odiseo\SyliusRbacPlugin\Access\Exception\UnresolvedRouteNameException;
 use Odiseo\SyliusRbacPlugin\Access\Model\AccessRequest;
 use Sylius\Component\Core\Model\AdminUserInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -28,6 +29,7 @@ final class AccessCheckListener
         private TokenStorageInterface $tokenStorage,
         private UrlGeneratorInterface $router,
         private RouteNameCheckerInterface $adminRouteChecker,
+        private \Twig\Environment $twig,
     ) {
     }
 
@@ -43,8 +45,14 @@ final class AccessCheckListener
             return;
         }
 
-        $this->addAccessErrorFlash($event->getRequest()->getMethod(), $event->getRequest()->getSession());
-        $event->setResponse($this->getRedirectResponse($event->getRequest()->headers->get('referer')));
+        $response = new Response(
+            $this->twig->render('@OdiseoSyliusRbacPlugin/Admin/Error/403.html.twig', [
+                'message' => 'odiseo_sylius_rbac_plugin.you_have_no_access_to_this_section'
+            ]),
+            Response::HTTP_FORBIDDEN
+        );
+        
+        $event->setResponse($response);
     }
 
     /** @throws InsecureRequestException */

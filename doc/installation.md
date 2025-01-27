@@ -35,110 +35,44 @@ odiseo_sylius_rbac_plugin_admin:
 5. Include traits and override the models
 
 ```php
+/src/Entity/Admin/AdminUser.php
 <?php
-
-declare(strict_types=1);
-
-namespace Sylius\Component\Core\Model;
-
-use Doctrine\Common\Collections\ArrayCollection;
+declare(strict_types=1);namespace BitBag\OpenMarketplace\Component\Core\Admin\Entity;use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
+use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
-use Sylius\Component\User\Model\User;
-use Symfony\Component\Security\Core\User\EquatableInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
-
-class AdminUser extends User implements AdminUserInterface, EquatableInterface, AdministrationRoleAwareInterface
+use Symfony\Component\Serializer\Annotation\Groups;
+#[ORM\Entity]#[ORM\Table(name: 'sylius_admin_user')]
+class AdminUser extends BaseAdminUser implements AdminUserInterface, AdministrationRoleAwareInterface
 {
-    /** @var string|null */
-    protected $firstName;
-
-    /** @var string|null */
-    protected $lastName;
-
-    /** @var string|null */
-    protected $localeCode;
-
-    /** @var ImageInterface|null */
-    protected $avatar;
+    #[ORM\Column(type: 'string', length: 20, nullable: true)]
+    #[Groups(['admin:admin_user:read', 'admin:admin_user:create', 'admin:admin_user:update'])]
+    protected ?string $phoneNumber;
 
     /** @var Collection<int, AdministrationRoleInterface> */
+    #[ORM\ManyToMany(targetEntity: AdministrationRoleInterface::class, inversedBy: 'adminUsers')]
+    #[ORM\JoinTable(name: 'sylius_admin_user_administration_roles')]
     protected Collection $administrationRoles;
 
     public function __construct()
     {
         parent::__construct();
-        $this->roles = [AdminUserInterface::DEFAULT_ADMIN_ROLE];
         $this->administrationRoles = new ArrayCollection();
     }
 
-    public function getFirstName(): ?string
+    public function getPhoneNumber(): ?string
     {
-        return $this->firstName;
+        return $this->phoneNumber;
     }
 
-    public function setFirstName(?string $firstName): void
+    public function setPhoneNumber(?string $phoneNumber): void
     {
-        $this->firstName = $firstName;
+        $this->phoneNumber = $phoneNumber;
     }
 
-    public function getLastName(): ?string
-    {
-        return $this->lastName;
-    }
-
-    public function setLastName(?string $lastName): void
-    {
-        $this->lastName = $lastName;
-    }
-
-    public function getFullName(): string
-    {
-        return trim(sprintf('%s %s', $this->firstName, $this->lastName));
-    }
-
-    public function getLocaleCode(): ?string
-    {
-        return $this->localeCode;
-    }
-
-    public function setLocaleCode(?string $code): void
-    {
-        $this->localeCode = $code;
-    }
-
-    public function getImage(): ?ImageInterface
-    {
-        return $this->avatar;
-    }
-
-    public function setImage(?ImageInterface $image): void
-    {
-        if ($image !== null) {
-            $image->setOwner($this);
-        }
-        $this->avatar = $image;
-    }
-
-    public function getAvatar(): ?ImageInterface
-    {
-        return $this->getImage();
-    }
-
-    public function setAvatar(?ImageInterface $avatar): void
-    {
-        $this->setImage($avatar);
-    }
-
-    public function isEqualTo(UserInterface $user): bool
-    {
-        return $user instanceof AdminUserInterface && $this->isEnabled() === $user->isEnabled();
-    }
-
-    /**
-     * @return Collection<int, AdministrationRoleInterface>
-     */
     public function getAdministrationRoles(): Collection
     {
         return $this->administrationRoles;
@@ -189,6 +123,7 @@ class AdminUser extends User implements AdminUserInterface, EquatableInterface, 
         return array_unique($roles);
     }
 }
+
 ```
 
 6. Finish the installation updating the database schema and installing assets

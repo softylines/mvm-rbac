@@ -1,0 +1,24 @@
+services:
+  Odiseo\SyliusRbacPlugin\Access\Listener\AccessCheckListener:
+    public: true
+    arguments:
+      $tokenStorage: '@security.token_storage'
+      $administratorAccessChecker: '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker'
+      $accessRequestCreator: '@Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreator'
+      $routeNameCheckerInterface: '@Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameChecker'
+      $urlGenerator: '@router'
+      $twig: '@twig'
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, priority: 40 }
+
+  Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessChecker:
+    public: true
+
+  Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreator:
+    public: true
+    arguments:
+      $configuration: '%odiseo_sylius_rbac_plugin.configuration%'
+
+  Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameChecker:
+    public: true
+    alias: Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface
