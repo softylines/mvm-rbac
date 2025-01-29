@@ -248,6 +248,36 @@ final class AdminMenuAccessListener
                 $marketplace->removeChild('conversations_category');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::media())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('media');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::blocks())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('blocks');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::pages())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('pages');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::faq())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('faq');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::sections())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('sections');
+            }
+        }
         /** @var string $customSection */
         foreach (array_keys($this->configuration['custom']) as $customSection) {
             if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {

@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!-- PHPUnit configuration file for the RBAC Plugin -->
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/8.5/phpunit.xsd"
          colors="true"
          bootstrap="tests/Application/config/bootstrap.php">
+    <!-- Test suite configuration -->
     <testsuites>
+        <!-- Main test suite for the RBAC Plugin -->
         <testsuite name="SyliusRbacPlugin Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
 
+    <!-- PHP settings and environment variables -->
     <php>
+        <!-- Show all errors during testing -->
         <ini name="error_reporting" value="-1" />
 
+        <!-- Application specific configuration -->
         <server name="KERNEL_CLASS_PATH" value="/tests/Application/AppKernel.php" />
         <server name="IS_DOCTRINE_ORM_SUPPORTED" value="true" />
 
+        <!-- Environment settings -->
         <env name="APP_ENV" value="test"/>
+        <!-- Disable Symfony console output during tests -->
         <env name="SHELL_VERBOSITY" value="-1" />
     </php>
 </phpunit>

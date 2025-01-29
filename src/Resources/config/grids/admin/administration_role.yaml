@@ -4,7 +4,7 @@ sylius_grid:
       driver:
         name: doctrine/orm
         options:
-          class: '%odiseo_sylius_rbac_plugin.model.administration_role.class%'
+          class: "%odiseo_sylius_rbac_plugin.model.administration_role.class%"
       fields:
         name:
           type: string
@@ -16,11 +16,25 @@ sylius_grid:
             options:
               link:
                 route: odiseo_sylius_rbac_plugin_admin_administration_role_create_view
+        bulk:
+          delete:
+            type: delete
+            label: sylius.ui.delete
+            options:
+              link:
+                route: odiseo_sylius_rbac_plugin_admin_administration_role_bulk_delete
         item:
           update:
             type: update
             options:
               link:
                 route: odiseo_sylius_rbac_plugin_admin_administration_role_update_view
+                parameters:
+                  id: resource.id
+          delete:
+            type: delete
+            options:
+              link:
+                route: odiseo_sylius_rbac_plugin_admin_administration_role_delete
                 parameters:
                   id: resource.id

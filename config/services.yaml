@@ -1,0 +1,8 @@
+services:
+  Odiseo\SyliusRbacPlugin\Action\CreateAdministrationRoleAction:
+    arguments:
+      $bus: '@messenger.bus.default'
+      $administrationRolePermissionNormalizer: '@Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer'
+      $router: '@router'
+      $twig: '@twig'
+      $availablePermissions: '%sylius.rbac.available_permissions%'

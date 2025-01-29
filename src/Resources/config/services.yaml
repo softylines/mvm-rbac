@@ -9,6 +9,7 @@ imports:
 
 services:
   Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer:
+    alias: odiseo_sylius_rbac_plugin.normalizer.administration_role_permission
 
   odiseo_sylius_rbac_plugin.custom_factory.administration_role:
     class: Odiseo\SyliusRbacPlugin\Factory\AdministrationRoleFactory
@@ -42,3 +43,57 @@ services:
       - "@odiseo_sylius_rbac_plugin.repository.administration_role"
       - "@doctrine.orm.entity_manager"
       - "@odiseo_sylius_rbac_plugin.custom_factory.administration_role"
+
+  Odiseo\SyliusRbacPlugin\Action\UpdateAdministrationRoleAction:
+    arguments:
+      - "@messenger.default_bus"
+      - "@odiseo_sylius_rbac_plugin.normalizer.administration_role_permission"
+      - "@router"
+      - "@odiseo_sylius_rbac_plugin.repository.administration_role"
+      - "@security.helper"
+      - "@twig"
+    public: true
+    tags: ["controller.service_arguments"]
+
+  odiseo_sylius_rbac_plugin.normalizer.administration_role_permission:
+    class: Odiseo\SyliusRbacPlugin\Normalizer\AdministrationRolePermissionNormalizer
+
+  odiseo_sylius_rbac_plugin.grid.export_action_visibility_listener:
+    class: Odiseo\SyliusRbacPlugin\Grid\ExportActionVisibilityListener
+    arguments:
+      - '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface'
+      - "@security.helper"
+    tags:
+      - {
+          name: kernel.event_listener,
+          event: sylius.grid.admin,
+          method: onSyliusGridAdmin,
+          priority: 128,
+        }
+
+  odiseo_sylius_rbac_plugin.grid.import_action_visibility_listener:
+    class: Odiseo\SyliusRbacPlugin\Grid\ImportActionVisibilityListener
+    arguments:
+      - '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface'
+      - "@security.helper"
+    tags:
+      - {
+          name: kernel.event_listener,
+          event: sylius.grid.admin,
+          method: onSyliusGridAdmin,
+          priority: 128,
+        }
+
+  odiseo_sylius_rbac_plugin.event_listener.import_export_access:
+    class: Odiseo\SyliusRbacPlugin\EventListener\ImportExportAccessListener
+    arguments:
+      - '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface'
+      - "@security.helper"
+      - "@security.token_storage"
+    tags:
+      - {
+          name: kernel.event_listener,
+          event: kernel.request,
+          method: onKernelRequest,
+          priority: 0,
+        }

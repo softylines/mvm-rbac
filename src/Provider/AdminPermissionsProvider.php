@@ -44,7 +44,8 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
                 Permission::EXCHANGE_RATES_MANAGEMENT_PERMISSION,
                 Permission::TAX_RATES_MANAGEMENT_PERMISSION,
                 Permission::TAX_CATEGORIES_MANAGEMENT_PERMISSION,
-                Permission::CUSTOMERS_MANAGEMENT_PERMISSION,
+               // Permission::CUSTOMERS_MANAGEMENT_PERMISSION,
+                Permission::CUSTOMERS,
                 //Permission::MARKETING_MANAGEMENT_PERMISSION,
                 Permission::PRODUCT_REVIEWS_PERMISSION,
                 Permission::PROMOTIONS_PERMISSION,
@@ -60,6 +61,11 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
                 Permission::VIRTUAL_WALLET_PERMISSION,
                 Permission::MESSAGES_PERMISSION,
                 Permission::MESSAGES_CATEGORY_PERMISSION,
+                Permission::BLOCKS_MANAGEMENT_PERMISSION,
+                Permission::MEDIA_MANAGEMENT_PERMISSION,
+                Permission::PAGES_MANAGEMENT_PERMISSION,
+                Permission::FAQ_MANAGEMENT_PERMISSION,
+                Permission::SECTIONS_MANAGEMENT_PERMISSION,
             
             ],
         );

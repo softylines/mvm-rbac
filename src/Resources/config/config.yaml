@@ -5,7 +5,7 @@ imports:
   - { resource: sylius_ui.yaml }
 
 parameters:
-  root_administrator_email: ''
+  root_administrator_email: ""
 
 odiseo_sylius_rbac:
   sylius_sections:
@@ -43,7 +43,7 @@ odiseo_sylius_rbac:
       - sylius_admin_tax_rate
     tax_categories_management:
       - sylius_admin_tax_category
-    customers_management:
+    customers:
       - sylius_admin_customer
       - sylius_admin_customer_group
       - sylius_admin_shop_user
@@ -72,6 +72,33 @@ odiseo_sylius_rbac:
       - open_marketplace_admin_conversation_index
     messages_category:
       - open_marketplace_admin_conversation_category_index
+    content_management:
+      - bitbag_sylius_cms_plugin_admin
+    blocks_management:
+      - bitbag_sylius_cms_plugin_admin_block_index
+      - bitbag_sylius_cms_plugin_admin_block_create
+      - bitbag_sylius_cms_plugin_admin_block_update
+      - bitbag_sylius_cms_plugin_admin_block_delete
+    media_management:
+      - bitbag_sylius_cms_plugin_admin_media_index
+      - bitbag_sylius_cms_plugin_admin_media_create
+      - bitbag_sylius_cms_plugin_admin_media_update
+      - bitbag_sylius_cms_plugin_admin_media_delete
+    pages_management:
+      - bitbag_sylius_cms_plugin_admin_page_index
+      - bitbag_sylius_cms_plugin_admin_page_create
+      - bitbag_sylius_cms_plugin_admin_page_update
+      - bitbag_sylius_cms_plugin_admin_page_delete
+    faq_management:
+      - bitbag_sylius_cms_plugin_admin_frequently_asked_question_index
+      - bitbag_sylius_cms_plugin_admin_frequently_asked_question_create
+      - bitbag_sylius_cms_plugin_admin_frequently_asked_question_update
+      - bitbag_sylius_cms_plugin_admin_frequently_asked_question_delete
+    sections_management:
+      - bitbag_sylius_cms_plugin_admin_section_index
+      - bitbag_sylius_cms_plugin_admin_section_create
+      - bitbag_sylius_cms_plugin_admin_section_update
+      - bitbag_sylius_cms_plugin_admin_section_delete
   custom_sections:
     rbac:
       - odiseo_sylius_rbac_plugin

@@ -28,3 +28,17 @@ services:
       - "@router"
       - "@odiseo_sylius_rbac_plugin.repository.administration_role"
       - "@security.helper"
+
+  Odiseo\SyliusRbacPlugin\Action\DeleteAdministrationRoleAction:
+    public: true
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@router"
+      - "@odiseo_sylius_rbac_plugin.repository.administration_role"
+
+  Odiseo\SyliusRbacPlugin\Action\BulkDeleteAdministrationRoleAction:
+    public: true
+    arguments:
+      - "@doctrine.orm.entity_manager"
+      - "@odiseo_sylius_rbac_plugin.repository.administration_role"
+      - "@router"

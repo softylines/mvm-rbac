@@ -73,10 +73,10 @@ final class InstallPluginCommand extends Command
         $roleRepository = $this->entityManager->getRepository(AdministrationRole::class);
         $configuratorRole = null;
 
-        $existingConfiguratorRole = $roleRepository->findOneBy(['name' => 'Configurator']);
+        $existingConfiguratorRole = $roleRepository->findOneBy(['name' => 'configurator']);
         if (!$existingConfiguratorRole) {
             $configuratorRole = new AdministrationRole();
-            $configuratorRole->setName('Configurator');
+            $configuratorRole->setName('configurator');
             
             $configuratorPermissions = [
                 'rbac', 'vendor', 'options', 'messages', 'dashboard', 'promotions',
@@ -115,17 +115,12 @@ final class InstallPluginCommand extends Command
             $io->text('Created No sections access role');
         }
         
-        if (!$roleRepository->findOneBy(['name' => 'Vendor'])) {
+        if (!$roleRepository->findOneBy(['name' => 'products_management'])) {
             $vendorRole = new AdministrationRole();
-            $vendorRole->setName('Vendor');
+            $vendorRole->setName('products_management');
             
             $vendorPermissions = [
                 'products_management' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
-                'inventory_management' => [OperationType::read(), OperationType::update()],
-                'orders_management' => [OperationType::read()],
-                'product_listings' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
-                'messages' => [OperationType::read(), OperationType::create(), OperationType::update(), OperationType::delete()],
-                'virtual_wallet' => [OperationType::read()]
             ];
 
             foreach ($vendorPermissions as $section => $operations) {
@@ -133,7 +128,7 @@ final class InstallPluginCommand extends Command
             }
 
             $this->entityManager->persist($vendorRole);
-            $io->text('Created Vendor role');
+            $io->text('Created products_management role');
         }
 
         $this->entityManager->flush();

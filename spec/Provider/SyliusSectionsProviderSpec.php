@@ -47,6 +47,14 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
                 'sales_management' => [
                     'sylius_admin_order',
                 ],
+                'content_management' => [
+                    'sylius_admin_content',
+                    'sylius_admin_blocks',
+                    'sylius_admin_media',
+                    'sylius_admin_pages',
+                    'sylius_admin_faq',
+                    'sylius_admin_sections',
+                ],
                 'custom' => [
                     'rbac' => [
                         'odiseo_sylius_rbac_plugin',
@@ -69,6 +77,7 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
             'customers_management',
             'marketing_management',
             'sales_management',
+            'content_management',
             'rbac',
         ]);
     }

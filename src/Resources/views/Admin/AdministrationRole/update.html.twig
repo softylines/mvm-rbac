@@ -11,6 +11,23 @@
 {% set createOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::CREATE') %}
 {% set updateOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::UPDATE') %}
 {% set deleteOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::DELETE') %}
+{% set importOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::IMPORT') %}
+{% set exportOperationType = constant('Odiseo\\SyliusRbacPlugin\\Access\\Model\\OperationType::EXPORT') %}
+
+{% set importable_resources = {
+    'countries_management': 'country',
+    'customers': 'customer',
+    'payment_methods_management': 'payment_method',
+    'tax_categories_management': 'tax_category',
+    'products_management': 'product'
+} %}
+
+{% set exportable_resources = {
+    'countries_management': 'country',
+    'orders_management': 'order',
+    'customers': 'customer',
+    'products_management': 'product'
+} %}
 
 <div class="ui segment">
     <form name="odiseo_sylius_rbac_plugin_administration_role" method="POST" class="ui loadable form" novalidate="novalidate" action={{ path('odiseo_sylius_rbac_plugin_admin_administration_role_update', {'id': administration_role.id}) }}>
@@ -28,48 +45,81 @@
                         <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.create'|trans }}</th>
                         <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.update'|trans }}</th>
                         <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.delete'|trans }}</th>
+                        <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.import'|trans }}</th>
+                        <th>{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.export'|trans }}</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for permission in permissions %}
-                    {% set is_create_access_granted = false %}
-                    {% set is_update_access_granted = false %}
-                    {% set is_delete_access_granted = false %}
-                    {% set is_read_access_granted = false %}
-
+                    {% set currentPermission = null %}
                     {% for rolePermission in rolePermissions %}
                         {% if rolePermission.type == permission %}
-                            {% set is_create_access_granted = (createOperationType in rolePermission.operationTypes) %}
-                            {% set is_update_access_granted = (updateOperationType in rolePermission.operationTypes) %}
-                            {% set is_delete_access_granted = (deleteOperationType in rolePermission.operationTypes) %}
-                            {% set is_read_access_granted = (readOperationType in rolePermission.operationTypes) %}
+                            {% set currentPermission = rolePermission %}
                         {% endif %}
                     {% endfor %}
 
                     <tr>
-                        <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permissions'|trans }}">{{ ('odiseo_sylius_rbac_plugin.ui.permission.' ~ permission)|trans }}</td>
+                        <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permissions'|trans }}">
+                            {{ ('odiseo_sylius_rbac_plugin.ui.permission.' ~ permission)|trans }}
+                        </td>
                         <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.read'|trans }}">
                             <div class="ui toggle checkbox">
                                 {% set permissionReadOperationType = "permissions[" ~ permission ~ "][" ~ readOperationType ~ "]" %}
-                                <input type="checkbox" id="{{ permissionReadOperationType }}" name="{{ permissionReadOperationType }}" value="{{ readOperationType }}" {% if is_read_access_granted %}checked="checked"{% endif %}>
+                                <input type="checkbox" id="{{ permissionReadOperationType }}" name="{{ permissionReadOperationType }}" value="{{ readOperationType }}" {% if currentPermission and readOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                <label></label>
                             </div>
                         </td>
                         <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.create'|trans }}">
                             <div class="ui toggle checkbox">
                                 {% set permissionCreateOperationType = "permissions[" ~ permission ~ "][" ~ createOperationType ~ "]" %}
-                                <input type="checkbox" id="{{ permissionCreateOperationType }}" name="{{ permissionCreateOperationType }}" value="{{ createOperationType }}" {% if is_create_access_granted %}checked="checked"{% endif %}>
+                                <input type="checkbox" id="{{ permissionCreateOperationType }}" name="{{ permissionCreateOperationType }}" value="{{ createOperationType }}" {% if currentPermission and createOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                <label></label>
                             </div>
                         </td>
                         <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.update'|trans }}">
                             <div class="ui toggle checkbox">
                                 {% set permissionUpdateOperationType = "permissions[" ~ permission ~ "][" ~ updateOperationType ~ "]" %}
-                                <input type="checkbox" id="{{ permissionUpdateOperationType }}" name="{{ permissionUpdateOperationType }}" value="{{ updateOperationType }}" {% if is_update_access_granted %}checked="checked"{% endif %}>
+                                <input type="checkbox" id="{{ permissionUpdateOperationType }}" name="{{ permissionUpdateOperationType }}" value="{{ updateOperationType }}" {% if currentPermission and updateOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                <label></label>
                             </div>
                         </td>
                         <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.delete'|trans }}">
                             <div class="ui toggle checkbox">
                                 {% set permissionDeleteOperationType = "permissions[" ~ permission ~ "][" ~ deleteOperationType ~ "]" %}
-                                <input type="checkbox" id="{{ permissionDeleteOperationType }}" name="{{ permissionDeleteOperationType }}" value="{{ deleteOperationType }}" {% if is_delete_access_granted %}checked="checked"{% endif %}>
+                                <input type="checkbox" id="{{ permissionDeleteOperationType }}" name="{{ permissionDeleteOperationType }}" value="{{ deleteOperationType }}" {% if currentPermission and deleteOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                <label></label>
+                            </div>
+                        </td>
+                        <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.import'|trans }}">
+                            {% set isImportable = permission in importable_resources|keys %}
+                            <div class="ui toggle checkbox{% if not isImportable %} disabled{% endif %}">
+                                {% if isImportable %}
+                                    {% set permissionImportOperationType = "permissions[" ~ permission ~ "][" ~ importOperationType ~ "]" %}
+                                    <input type="checkbox" 
+                                           id="{{ permissionImportOperationType }}" 
+                                           name="{{ permissionImportOperationType }}" 
+                                           value="{{ importOperationType }}"
+                                           {% if currentPermission and importOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                {% else %}
+                                    <input type="checkbox" disabled="disabled">
+                                {% endif %}
+                                <label></label>
+                            </div>
+                        </td>
+                        <td data-label="{{ 'odiseo_sylius_rbac_plugin.ui.permission.operation_type.export'|trans }}">
+                            {% set isExportable = permission in exportable_resources|keys %}
+                            <div class="ui toggle checkbox{% if not isExportable %} disabled{% endif %}">
+                                {% if isExportable %}
+                                    {% set permissionExportOperationType = "permissions[" ~ permission ~ "][" ~ exportOperationType ~ "]" %}
+                                    <input type="checkbox" 
+                                           id="{{ permissionExportOperationType }}" 
+                                           name="{{ permissionExportOperationType }}" 
+                                           value="{{ exportOperationType }}"
+                                           {% if currentPermission and exportOperationType in currentPermission.operationTypes %}checked="checked"{% endif %}>
+                                {% else %}
+                                    <input type="checkbox" disabled="disabled">
+                                {% endif %}
+                                <label></label>
                             </div>
                         </td>
                     </tr>

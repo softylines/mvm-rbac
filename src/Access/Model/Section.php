@@ -35,13 +35,17 @@ final class Section
     public const PAYMENTS = 'payments_management';
     public const ORDERS = 'orders_management';
     public const ADMINISTRATORS = 'administrators_management';
-    public const CUSTOMER = 'customers_management';
     public const PRODUCT_LISTINGS = 'product_listings';
     public const VENDOR = 'vendor';
     public const SETTLEMENT = 'settlement';
     public const VIRTUAL_WALLET = 'virtual_wallet';
     public const MESSAGES = 'messages';
     public const MESSAGES_CATEGORY = 'messages_category';
+    public const BLOCKS = 'blocks_management';
+    public const MEDIA = 'media_management';
+    public const PAGES = 'pages_management';
+    public const FAQ = 'faq_management';
+    public const SECTIONS = 'sections_management';
     private string $type;
 
     public static function dashboard(): self{
@@ -100,10 +104,10 @@ final class Section
         return new self(self::TAX_CATEGORIES);
     }
 
-    public static function customers(): self
-    {
-        return new self(self::CUSTOMERS);
-    }
+    //public static function customers(): self
+    //{
+    //    return new self(self::CUSTOMERS);
+    //}
 
     public static function marketing(): self
     {
@@ -139,10 +143,14 @@ final class Section
     {
         return new self(self::OPTIONS);
     }
-    public static function customer(): self
+    public static function customers(): self
     {
-        return new self(self::CUSTOMER);
+        return new self(self::CUSTOMERS);
     }
+    //public static function customerGroups(): self
+    //{
+    //    return new self(self::CUSTOMER_GROUPS);
+    //}
     public static function taxons(): self
     {
         return new self(self::TAXONS);
@@ -190,6 +198,27 @@ final class Section
     public static function messagesCategory(): self
     {
         return new self(self::MESSAGES_CATEGORY);
+    }
+
+    public static function blocks(): self
+    {
+        return new self(self::BLOCKS);
+    }
+    public static function media(): self
+    {
+        return new self(self::MEDIA);
+    }
+    public static function pages(): self
+    {
+        return new self(self::PAGES);
+    }
+    public static function faq(): self
+    {
+        return new self(self::FAQ);
+    }
+    public static function sections(): self
+    {
+        return new self(self::SECTIONS);
     }
     public static function ofType(string $type): self
     {

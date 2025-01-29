@@ -15,6 +15,22 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class CreateAdministrationRoleAction
 {
+    private const IMPORTABLE_RESOURCES = [
+        'country',
+        'customer_group',
+        'payment_method',
+        'tax_category',
+        'customer',
+        'product'
+    ];
+
+    private const EXPORTABLE_RESOURCES = [
+        'country',
+        'order',
+        'customer',
+        'product'
+    ];
+
     public function __construct(
         private MessageBusInterface $bus,
         private AdministrationRolePermissionNormalizerInterface $administrationRolePermissionNormalizer,
@@ -29,7 +45,7 @@ final class CreateAdministrationRoleAction
 
         try {
             /** @var array $administrationRolePermissions */
-            $administrationRolePermissions = $request->request->all()['permissions'];
+            $administrationRolePermissions = $request->request->all()['permissions'] ?? [];
 
             $normalizedPermissions = $this
                 ->administrationRolePermissionNormalizer
@@ -44,10 +60,7 @@ final class CreateAdministrationRoleAction
                 $normalizedPermissions,
             ));
 
-            $flashBag->add(
-                'success',
-                'odiseo_sylius_rbac_plugin.administration_role_successfully_created',
-            );
+            $flashBag->add('success', 'odiseo_sylius_rbac_plugin.ui.administration_role_created');
         } catch (\Exception $exception) {
             $flashBag->add('error', $exception->getMessage());
         }

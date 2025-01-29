@@ -8,7 +8,8 @@ use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 use Webmozart\Assert\Assert;
 
 final class Permission implements PermissionInterface
-{public const DASHBOARD_PERMISSION = 'dashboard';
+{
+    public const DASHBOARD_PERMISSION = 'dashboard';
     public const ADMINISTRATORS_MANAGEMENT_PERMISSION = 'administrators_management';
     public const CATALOG_MANAGEMENT_PERMISSION = 'catalog_management';
     public const PRODUCTS_MANAGEMENT_PERMISSION = 'products_management';
@@ -29,7 +30,8 @@ final class Permission implements PermissionInterface
     public const TAX_RATES_MANAGEMENT_PERMISSION = 'tax_rates_management';
     public const TAX_CATEGORIES_MANAGEMENT_PERMISSION = 'tax_categories_management';
 
-    public const CUSTOMERS_MANAGEMENT_PERMISSION = 'customers_management';
+
+    public const CUSTOMERS = 'customers';
 
     public const MARKETING_MANAGEMENT_PERMISSION = 'marketing_management';
     public const PRODUCT_REVIEWS_PERMISSION = 'product_reviews';
@@ -40,21 +42,22 @@ final class Permission implements PermissionInterface
     public const PAYMENTS_MANAGEMENT_PERMISSION = 'payments_management';    
     public const ORDERS_MANAGEMENT_PERMISSION = 'orders_management';
     public const OPTIONS_PERMISSION = 'options';
-    //MarketPlace
+
     public const PRODUCT_LISTINGS_PERMISSION = 'product_listings';
     public const VENDOR_PERMISSION = 'vendor';
     public const SETTLEMENT_PERMISSION = 'settlement';
     public const VIRTUAL_WALLET_PERMISSION = 'virtual_wallet';
     public const MESSAGES_PERMISSION = 'messages';
     public const MESSAGES_CATEGORY_PERMISSION = 'messages_category';
+    public const BLOCKS_MANAGEMENT_PERMISSION = 'blocks_management';
+    public const MEDIA_MANAGEMENT_PERMISSION = 'media_management';
+    public const PAGES_MANAGEMENT_PERMISSION = 'pages_management';
+    public const FAQ_MANAGEMENT_PERMISSION = 'faq_management';
+    public const SECTIONS_MANAGEMENT_PERMISSION = 'sections_management';
     private string $type;
 
     private array $operationTypes;
 
-    //public static function catalogManagement(array $operationTypes = []): self
-    //{
-    //    return new self(self::CATALOG_MANAGEMENT_PERMISSION, $operationTypes);
-    //}
     public static function dashboard(array $operationTypes = []): self 
     {
         return new self(self::DASHBOARD_PERMISSION, $operationTypes);
@@ -87,10 +90,6 @@ final class Permission implements PermissionInterface
     {
         return new self(self::ASSOCIATION_TYPES_MANAGEMENT_PERMISSION, $operationTypes);
     }
-    //public static function configuration(array $operationTypes = []): self
-    //{
-    //    return new self(self::CONFIGURATION_PERMISSION, $operationTypes);
-    //}
     public static function channelsManagement(array $operationTypes = []): self
     {
         return new self(self::CHANNELS_MANAGEMENT_PERMISSION, $operationTypes);
@@ -135,15 +134,12 @@ final class Permission implements PermissionInterface
     {
         return new self(self::TAX_CATEGORIES_MANAGEMENT_PERMISSION, $operationTypes);
     }
-    public static function customerManagement(array $operationTypes = []): self
+
+    public static function customers(array $operationTypes = []): self
     {
-        return new self(self::CUSTOMERS_MANAGEMENT_PERMISSION, $operationTypes);
+        return new self(self::CUSTOMERS, $operationTypes);
     }
 
-    //public static function marketingManagement(array $operationTypes = []): self
-    //{
-    //    return new self(self::MARKETING_MANAGEMENT_PERMISSION, $operationTypes);
-    //}
 
     public static function ProductReviews(array $operationTypes = []): self
     {
@@ -159,10 +155,6 @@ final class Permission implements PermissionInterface
         return new self(self::CATALOG_PROMOTIONS_PERMISSION, $operationTypes);
     }
 
-    //public static function salesManagement(array $operationTypes = []): self
-    //{
-    //    return new self(self::SALES_MANAGEMENT_PERMISSION, $operationTypes);
-    //}
     public static function shippingManagement(array $operationTypes = []): self
     {
         return new self(self::SHIPPING_MANAGEMENT_PERMISSION, $operationTypes);
@@ -212,9 +204,7 @@ final class Permission implements PermissionInterface
             throw new \InvalidArgumentException('Missing type field in data array');
         }
 
-        // Handle case where operation_types might not be set
         if (!isset($data['operation_types']) || !is_array($data['operation_types'])) {
-            // For marketplace sections, only grant READ by default
             if (in_array($data['type'], [
                 self::PRODUCT_LISTINGS_PERMISSION,
                 self::VENDOR_PERMISSION,
@@ -265,15 +255,9 @@ final class Permission implements PermissionInterface
 
     public static function unserialize(string $serialized): self
     {
-        // Handle legacy format where permission might be just a string type
         if (!str_contains($serialized, '{')) {
             $type = $serialized;
-            // For marketplace sections, only grant READ by default
             if (in_array($type, [
-                self::PRODUCT_LISTINGS_PERMISSION,
-                self::VENDOR_PERMISSION,
-                self::SETTLEMENT_PERMISSION,
-                self::VIRTUAL_WALLET_PERMISSION,
                 self::MESSAGES_PERMISSION,
                 self::MESSAGES_CATEGORY_PERMISSION,
             ], true)) {
@@ -282,7 +266,6 @@ final class Permission implements PermissionInterface
                 ]);
             }
 
-            // For other sections, maintain backward compatibility
             return new self($type, [
                 new OperationType(OperationType::READ),
                 new OperationType(OperationType::CREATE),
@@ -322,6 +305,8 @@ final class Permission implements PermissionInterface
                 OperationType::create()->__toString(),
                 OperationType::update()->__toString(),
                 OperationType::delete()->__toString(),
+                OperationType::import()->__toString(),
+                OperationType::export()->__toString(),
             ],
         );
 

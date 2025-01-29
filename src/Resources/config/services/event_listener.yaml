@@ -10,9 +10,9 @@ services:
 
   Odiseo\SyliusRbacPlugin\Access\Menu\AdminMenuAccessListener:
     arguments:
-      - "@security.token_storage"
+      - '@security.token_storage'
       - '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface'
-      - "%odiseo_sylius_rbac_plugin.configuration%"
+      - '%odiseo_sylius_rbac_plugin.configuration%'
     tags:
       - {
           name: kernel.event_listener,
@@ -25,17 +25,17 @@ services:
     arguments:
       - '@Odiseo\SyliusRbacPlugin\Access\Creator\AccessRequestCreatorInterface'
       - '@Odiseo\SyliusRbacPlugin\Access\Checker\AdministratorAccessCheckerInterface'
-      - "@security.token_storage"
-      - "@router"
+      - '@security.token_storage'
+      - '@router'
       - '@Odiseo\SyliusRbacPlugin\Access\Checker\RouteNameCheckerInterface'
-      - "@twig"
+      - '@twig'
     tags:
       - { name: kernel.event_listener, event: kernel.request }
 
   odiseo_sylius_rbac_plugin.event_listener.administration_role_aware_listener:
     class: Odiseo\SyliusRbacPlugin\Mapping\AdministrationRoleAwareListener
     arguments:
-      - "@sylius.resource_registry"
-      - "%odiseo_sylius_rbac_plugin.model.administration_role.class%"
+      - '@sylius.resource_registry'
+      - '%odiseo_sylius_rbac_plugin.model.administration_role.class%'
     tags:
       - { name: doctrine.event_subscriber, connection: default, priority: 99 }

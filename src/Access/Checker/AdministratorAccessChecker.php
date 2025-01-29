@@ -14,77 +14,157 @@ use Webmozart\Assert\Assert;
 
 final class AdministratorAccessChecker implements AdministratorAccessCheckerInterface
 {
+    private const IMPORTABLE_RESOURCES = [
+        'countries_management' => 'country',
+        'customers' => 'customer',
+        'payment_methods_management' => 'payment_method',
+        'tax_categories_management' => 'tax_category',
+        'products_management' => 'product'
+    ];
+
+    private const EXPORTABLE_RESOURCES = [
+        'countries_management' => 'country',
+        'orders_management' => 'order',
+        'customers' => 'customer',
+        'products_management' => 'product'
+    ];
+
     public function canAccessSection(AdminUserInterface $admin, AccessRequest $accessRequest): bool
     {
         if (!$admin instanceof AdministrationRoleAwareInterface) {
             return false;
         }
 
-        // Get all administration roles
-        $administrationRoles = $admin->getAdministrationRoles();
-        if ($administrationRoles->isEmpty()) {
+        $requestedSection = $accessRequest->section()->__toString();
+        $requestedOperation = $accessRequest->operationType()->__toString();
+
+        // Early return if the resource doesn't support import/export
+        if ($requestedOperation === OperationType::IMPORT && !isset(self::IMPORTABLE_RESOURCES[$requestedSection])) {
             return false;
         }
 
-        // Check each role's permissions
-        foreach ($administrationRoles as $administrationRole) {
-            /** @var Permission $permission */
-            foreach ($administrationRole->getPermissions() as $permission) {
+        if ($requestedOperation === OperationType::EXPORT && !isset(self::EXPORTABLE_RESOURCES[$requestedSection])) {
+            return false;
+        }
+
+        // Check user permissions
+        $hasPermission = false;
+        foreach ($admin->getAdministrationRoles() as $role) {
+            foreach ($role->getPermissions() as $permission) {
                 if ($permission === null) {
                     continue;
                 }
 
-                // Direct match - permission type matches section exactly
-                if ($permission->type() === $accessRequest->section()->__toString()) {
-                    $requestedOperation = $accessRequest->operationType()->__toString();
-                    $grantedOperations = array_map(
+                if ($permission->type() === $requestedSection) {
+                    $operations = array_map(
                         fn(OperationType $type) => $type->__toString(),
                         $permission->operationTypes()
                     );
 
-                    // Special handling for marketplace sections - strict operation type checking
-                    if (str_starts_with($permission->type(), 'product_listings') ||
-                        str_starts_with($permission->type(), 'vendor') ||
-                        str_starts_with($permission->type(), 'settlement') ||
-                        str_starts_with($permission->type(), 'virtual_wallet') ||
-                        str_starts_with($permission->type(), 'messages') ||
-                        str_starts_with($permission->type(), 'messages_category')) {
-                        
-                        if (in_array($requestedOperation, $grantedOperations, true)) {
-                            return true; // If any role grants access, return true
-                        }
-                        continue; // Check next permission if this one doesn't grant access
-                    }
-
-                    // For non-marketplace sections, maintain existing behavior
-                    if (in_array($requestedOperation, $grantedOperations, true)) {
-                        return true; // If any role grants access, return true
+                    if (in_array($requestedOperation, $operations, true)) {
+                        $hasPermission = true;
+                        break 2;
                     }
                 }
             }
         }
 
-        return false; // No role grants access
+        return $hasPermission;
     }
 
-    private function canReadAccess(Permission $permission): bool
+    public function hasImportPermission(AdminUserInterface $admin, string $section): bool
     {
-        return $this->hasOperationType($permission, OperationType::READ);
+        if (!isset(self::IMPORTABLE_RESOURCES[$section])) {
+            return false;
+        }
+
+        foreach ($admin->getAdministrationRoles() as $role) {
+            foreach ($role->getPermissions() as $permission) {
+                if ($permission === null) {
+                    continue;
+                }
+
+                if ($permission->type() === $section) {
+                    foreach ($permission->operationTypes() as $operationType) {
+                        if ($operationType->__toString() === OperationType::IMPORT) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
-    private function canCreateAccess(Permission $permission): bool
+    public function hasExportPermission(AdminUserInterface $admin, string $section): bool
     {
-        return $this->hasOperationType($permission, OperationType::CREATE);
+        if (!isset(self::EXPORTABLE_RESOURCES[$section])) {
+            return false;
+        }
+
+        foreach ($admin->getAdministrationRoles() as $role) {
+            foreach ($role->getPermissions() as $permission) {
+                if ($permission === null) {
+                    continue;
+                }
+
+                if ($permission->type() === $section) {
+                    foreach ($permission->operationTypes() as $operationType) {
+                        if ($operationType->__toString() === OperationType::EXPORT) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
-    private function canUpdateAccess(Permission $permission): bool
+    public function getImportReaderType(string $section): ?string
     {
-        return $this->hasOperationType($permission, OperationType::UPDATE);
+        if (!$this->canImportResource($section)) {
+            return null;
+        }
+
+        $resource = self::IMPORTABLE_RESOURCES[$section];
+        $readerTypes = [
+            'product' => ['csv', 'excel', 'json'],
+            'customer' => ['csv', 'excel', 'json'],
+            'country' => ['csv', 'excel', 'json'],
+            'payment_method' => ['csv', 'excel', 'json'],
+            'tax_category' => ['csv', 'excel', 'json'],
+        ];
+
+        return $readerTypes[$resource] ?? null;
     }
 
-    private function canDeleteAccess(Permission $permission): bool
+    public function getExportWriterType(string $section): ?string
     {
-        return $this->hasOperationType($permission, OperationType::DELETE);
+        if (!$this->canExportResource($section)) {
+            return null;
+        }
+
+        $resource = self::EXPORTABLE_RESOURCES[$section];
+        $writerTypes = [
+            'product' => ['csv', 'excel', 'json'],
+            'customer' => ['csv', 'excel', 'json'],
+            'country' => ['csv', 'excel', 'json'],
+            'order' => ['csv', 'excel', 'json'],
+        ];
+
+        return $writerTypes[$resource] ?? null;
+    }
+
+    private function canImportResource(string $section): bool
+    {
+        return isset(self::IMPORTABLE_RESOURCES[$section]);
+    }
+
+    private function canExportResource(string $section): bool
+    {
+        return isset(self::EXPORTABLE_RESOURCES[$section]);
     }
 
     private function hasOperationType(Permission $permission, string $type): bool
@@ -97,3 +177,4 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
         return false;
     }
 }
+ 

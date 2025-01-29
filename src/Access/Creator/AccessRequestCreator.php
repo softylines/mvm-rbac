@@ -19,6 +19,8 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
     public function createFromRouteName(string $routeName, string $requestMethod): AccessRequest
     {
         $operationType = $this->resolveOperationType($requestMethod);
+
+
         if ($routeName === 'sylius_admin_dashboard') {
             return new AccessRequest(Section::dashboard(), $operationType);
         }
@@ -123,18 +125,11 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
         }
         
 
-        foreach ($this->configuration['customers_management'] as $customersRoutePrefix) {
+        foreach ($this->configuration['customers'] as $customersRoutePrefix) {
             if (str_starts_with($routeName, $customersRoutePrefix)) {
                 return new AccessRequest(Section::customers(), $operationType);
             }
         }
-
-
-      //  foreach ($this->configuration['marketing_management'] as $marketingRoutePrefix) {
-      //      if (str_starts_with($routeName, $marketingRoutePrefix)) {
-      //          return new AccessRequest(Section::marketing(), $operationType);
-      //      }
-      //  }
 
         foreach ($this->configuration['product_reviews'] as $productReviewsRoutePrefix) {
             if (str_starts_with($routeName, $productReviewsRoutePrefix)) {
@@ -151,11 +146,6 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
                 return new AccessRequest(Section::catalogPromotions(), $operationType);
             }
         }
-      //  foreach ($this->configuration['sales_management'] as $salesRoutePrefix) {
-      //      if (str_starts_with($routeName, $salesRoutePrefix)) {
-      //          return new AccessRequest(Section::sales(), $operationType);
-      //      }
-      //  }
         foreach ($this->configuration['shipping_management'] as $shippingRoutePrefix) {
             if (str_starts_with($routeName, $shippingRoutePrefix)) {
                 return new AccessRequest(Section::shipping(), $operationType);
@@ -171,11 +161,7 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
                 return new AccessRequest(Section::orders(), $operationType);
             }
         }
-      //  foreach ($this->configuration['catalog_management'] as $catalogRoutePrefix) {
-      //      if (str_starts_with($routeName, $catalogRoutePrefix)) {
-      //          return new AccessRequest(Section::catalog(), $operationType);
-      //      }
-      //  }
+
         foreach ($this->configuration['products_management'] as $productsRoutePrefix) {
             if (str_starts_with($routeName, $productsRoutePrefix)) {
                 return new AccessRequest(Section::products(), $operationType);
@@ -207,7 +193,31 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
                 return new AccessRequest(Section::associationTypes(), $operationType);
             }
         }
-    
+    foreach($this->configuration['blocks_management'] as $blocksRoutePrefix){
+        if (str_starts_with($routeName, $blocksRoutePrefix)) {
+            return new AccessRequest(Section::blocks(), $operationType);
+        }
+    }
+    foreach($this->configuration['pages_management'] as $pagesRoutePrefix){
+        if (str_starts_with($routeName, $pagesRoutePrefix)) {
+            return new AccessRequest(Section::pages(), $operationType);
+        }
+    }
+    foreach($this->configuration['faq_management'] as $faqRoutePrefix){
+        if (str_starts_with($routeName, $faqRoutePrefix)) {
+            return new AccessRequest(Section::faq(), $operationType);
+        }
+    }
+    foreach($this->configuration['media_management'] as $mediaRoutePrefix){
+        if (str_starts_with($routeName, $mediaRoutePrefix)) {
+            return new AccessRequest(Section::media(), $operationType);
+        }
+    }
+    foreach($this->configuration['sections_management'] as $sectionsRoutePrefix){
+        if (str_starts_with($routeName, $sectionsRoutePrefix)) {
+            return new AccessRequest(Section::sections(), $operationType);
+        }
+    }
 
         foreach ($this->configuration['custom'] as $sectionName => $sectionPrefixes) {
            foreach ($sectionPrefixes as $prefix) {
@@ -222,7 +232,6 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
 
     public function resolveOperationType(string $requestMethod): OperationType
     {
-        
         $operationType = match (strtoupper($requestMethod)) {
             'GET' => OperationType::read(),
             'POST' => OperationType::create(),

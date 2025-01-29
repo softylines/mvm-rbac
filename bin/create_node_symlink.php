@@ -2,8 +2,7 @@
 
 const NODE_MODULES_FOLDER_NAME = 'node_modules';
 const PATH_TO_NODE_MODULES = 'tests' . DIRECTORY_SEPARATOR . 'Application' . DIRECTORY_SEPARATOR . 'node_modules';
-
-/* cannot use `file_exists` or `stat` as gives false on symlinks if target path does not exist yet */
+    
 if (@lstat(NODE_MODULES_FOLDER_NAME))
 {
     if (is_link(NODE_MODULES_FOLDER_NAME) || is_dir(NODE_MODULES_FOLDER_NAME)) {
@@ -18,12 +17,9 @@ if (@lstat(NODE_MODULES_FOLDER_NAME))
     }
 }
 
-/* try to create the symlink using PHP internals... */
 $success = @symlink(PATH_TO_NODE_MODULES, NODE_MODULES_FOLDER_NAME);
 
-/* if case it has failed, but OS is Windows... */
 if (!$success && strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-    /* ...then try a different approach which does not require elevated permissions and folder to exist */
     echo '> This system is running Windows, creation of links requires elevated privileges,' . PHP_EOL;
     echo '> and target path to exist. Fallback to NTFS Junction:' . PHP_EOL;
     exec(sprintf('mklink /J %s %s 2> NUL', NODE_MODULES_FOLDER_NAME, PATH_TO_NODE_MODULES), $output, $returnCode);
