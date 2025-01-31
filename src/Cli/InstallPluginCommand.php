@@ -147,6 +147,52 @@ final class InstallPluginCommand extends Command
 
         $connection = $this->entityManager->getConnection();
         
+        // Check if the table exists
+        $schemaManager = $connection->createSchemaManager();
+        $tableExists = $schemaManager->tablesExist(['sylius_admin_user_administration_roles']);
+        
+        if (!$tableExists) {
+            try {
+                // Create the table if it doesn't exist
+                $connection->executeStatement('
+                    CREATE TABLE sylius_admin_user_administration_roles (
+                        admin_user_id INT NOT NULL,
+                        administration_role_id INT NOT NULL,
+                        PRIMARY KEY(admin_user_id, administration_role_id)
+                    ) DEFAULT CHARACTER SET UTF8 COLLATE `UTF8_unicode_ci` ENGINE = InnoDB
+                ');
+
+                $connection->executeStatement('
+                    ALTER TABLE sylius_admin_user_administration_roles 
+                    ADD CONSTRAINT FK_ADMIN_USER_ID 
+                    FOREIGN KEY (admin_user_id) 
+                    REFERENCES sylius_admin_user (id) ON DELETE CASCADE
+                ');
+
+                $connection->executeStatement('
+                    ALTER TABLE sylius_admin_user_administration_roles 
+                    ADD CONSTRAINT FK_ADMINISTRATION_ROLE_ID 
+                    FOREIGN KEY (administration_role_id) 
+                    REFERENCES odiseo_rbac_administration_role (id) ON DELETE CASCADE
+                ');
+
+                $connection->executeStatement('
+                    CREATE INDEX IDX_ADMIN_USER 
+                    ON sylius_admin_user_administration_roles (admin_user_id)
+                ');
+
+                $connection->executeStatement('
+                    CREATE INDEX IDX_ADMINISTRATION_ROLE 
+                    ON sylius_admin_user_administration_roles (administration_role_id)
+                ');
+
+                $io->success('Created sylius_admin_user_administration_roles table');
+            } catch (\Exception $e) {
+                $io->error(sprintf('Failed to create table: %s', $e->getMessage()));
+                return;
+            }
+        }
+
         $adminUser = $this->entityManager->getRepository(AdminUser::class)->findOneBy(['email' => $adminEmail]);
         
         if (!$adminUser) {
