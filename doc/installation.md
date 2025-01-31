@@ -35,42 +35,33 @@ odiseo_sylius_rbac_plugin_admin:
 5. Include traits and override the models
 
 ```php
-/src/Entity/Admin/AdminUser.php
+/src/Entity/User/AdminUser.php
 <?php
-declare(strict_types=1);namespace BitBag\OpenMarketplace\Component\Core\Admin\Entity;use Doctrine\Common\Collections\ArrayCollection;
+
+declare(strict_types=1);
+
+namespace App\Entity\User;
+
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
-use Sylius\Component\Core\Model\AdminUserInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleAwareInterface;
 use Odiseo\SyliusRbacPlugin\Entity\AdministrationRoleInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
-#[ORM\Entity]#[ORM\Table(name: 'sylius_admin_user')]
-class AdminUser extends BaseAdminUser implements AdminUserInterface, AdministrationRoleAwareInterface
-{
-    #[ORM\Column(type: 'string', length: 20, nullable: true)]
-    #[Groups(['admin:admin_user:read', 'admin:admin_user:create', 'admin:admin_user:update'])]
-    protected ?string $phoneNumber;
+use Sylius\Component\Core\Model\AdminUser as BaseAdminUser;
 
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="sylius_admin_user")
+ */
+class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterface
+{
     /** @var Collection<int, AdministrationRoleInterface> */
-    #[ORM\ManyToMany(targetEntity: AdministrationRoleInterface::class, inversedBy: 'adminUsers')]
-    #[ORM\JoinTable(name: 'sylius_admin_user_administration_roles')]
     protected Collection $administrationRoles;
 
     public function __construct()
     {
         parent::__construct();
         $this->administrationRoles = new ArrayCollection();
-    }
-
-    public function getPhoneNumber(): ?string
-    {
-        return $this->phoneNumber;
-    }
-
-    public function setPhoneNumber(?string $phoneNumber): void
-    {
-        $this->phoneNumber = $phoneNumber;
     }
 
     public function getAdministrationRoles(): Collection
@@ -115,14 +106,19 @@ class AdminUser extends BaseAdminUser implements AdminUserInterface, Administrat
     public function getRoles(): array
     {
         $roles = parent::getRoles();
-
+        
         foreach ($this->getAdministrationRoles() as $administrationRole) {
+            $permissions = $administrationRole->getPermissions();
+            foreach ($permissions as $permission) {
+                $roles[] = 'ROLE_' . strtoupper($permission);
+            }
             $roles[] = 'ROLE_' . strtoupper($administrationRole->getName());
         }
-
+        
         return array_unique($roles);
     }
 }
+
 
 ```
 
