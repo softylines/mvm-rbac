@@ -42,14 +42,6 @@ final class ImportExportAccessListener
 
         $request = $event->getRequest();
         $path = $request->getPathInfo();
-        
-        dump('=== Debug Import/Export Access ===');
-        dump([
-            'Path' => $path,
-            'Method' => $request->getMethod(),
-            'Is Import/Export?' => $this->isImportExportRoute($path)
-        ]);
-
         if (!$this->isImportExportRoute($path)) {
             return;
         }
@@ -59,11 +51,6 @@ final class ImportExportAccessListener
             $resource = 'sylius.' . $resource;
         }
         
-        dump([
-            'Final processed resource' => $resource,
-            'Has sylius. prefix?' => $resource ? str_starts_with($resource, 'sylius.') : false,
-            'Is in mappings?' => $resource ? isset(self::RESOURCE_TO_SECTION_MAP[$resource]) : false
-        ]);
 
         if (!$resource) {
             throw new AccessDeniedHttpException(sprintf(
