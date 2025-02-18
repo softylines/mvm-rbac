@@ -24,7 +24,11 @@ final class ImportExportAccessListener
         'sylius.customer' => 'customers',
         'sylius.product' => 'products_management',
         'sylius.payment_method' => 'payment_methods_management',
-        'sylius.tax_category' => 'tax_categories_management'
+        'sylius.tax_category' => 'tax_categories_management',
+        'sylius.product_option' => 'options',
+        'sylius.product_attribute' => 'attributes_management',
+        'sylius.taxon' => 'taxons_management',
+        'sylius.open_market_place.vendor' => 'vendor'
     ];
 
     public function __construct(
@@ -42,16 +46,24 @@ final class ImportExportAccessListener
 
         $request = $event->getRequest();
         $path = $request->getPathInfo();
+        if ($this->isSampleDownloadRoute($path)) {
+            return;
+        }
         if (!$this->isImportExportRoute($path)) {
             return;
         }
 
         $resource = $this->getResourceFromRequest($request);
-        if ($resource && !str_starts_with($resource, 'sylius.')) {
+        
+        // Don't modify vendor resource prefix
+        if ($resource === 'vendor') {
+            $resource = 'open_market_place.vendor';
+        } 
+        // Add sylius prefix for other resources if needed
+        elseif ($resource && !str_starts_with($resource, 'sylius.')) {
             $resource = 'sylius.' . $resource;
         }
         
-
         if (!$resource) {
             throw new AccessDeniedHttpException(sprintf(
                 'Invalid resource type: %s. Available resources: %s',
@@ -86,7 +98,6 @@ final class ImportExportAccessListener
 
 
         if (!$this->adminAccessChecker->canAccessSection($currentUser, $accessRequest)) {
-            dump('Access Denied');
             throw new AccessDeniedHttpException(sprintf(
                 'Access Denied: No permission to %s %s',
                 $operationType->__toString(),
@@ -94,6 +105,10 @@ final class ImportExportAccessListener
             ));
         }
 
+    }
+    private function isSampleDownloadRoute(string $path): bool
+    {
+        return str_contains($path, '/import/sample/');
     }
 
     private function isImportExportRoute(string $path): bool
@@ -105,34 +120,36 @@ final class ImportExportAccessListener
     {
         if ($request->attributes->has('resource')) {
             $resource = $request->attributes->get('resource');
-            dump('Resource from attributes:', $resource);
-            if (!str_starts_with($resource, 'sylius.')) {
+            
+            if ($resource === 'open_marketplace.vendor') {
+                return 'open_market_place.vendor';
+            }
+            
+            if (!str_contains($resource, '.')) {
                 $resource = 'sylius.' . $resource;
             }
+            
             return $resource;
         }
 
         $pathParts = explode('/', trim($request->getPathInfo(), '/'));
-        dump('Path parts:', $pathParts);
         
         if (count($pathParts) >= 3 && $pathParts[0] === 'admin' && in_array($pathParts[1], ['import', 'export'])) {
             $resourceName = $pathParts[2];
-            $finalResource = !str_starts_with($resourceName, 'sylius.') 
-                ? 'sylius.' . $resourceName 
-                : $resourceName;
             
-            dump([
-                'Original resource name' => $resourceName,
-                'Final resource name' => $finalResource,
-                'Has sylius. prefix?' => str_starts_with($finalResource, 'sylius.'),
-                'Available mappings' => array_keys(self::RESOURCE_TO_SECTION_MAP),
-                'Is in mappings?' => isset(self::RESOURCE_TO_SECTION_MAP[$finalResource])
-            ]);
+            // Special handling for open marketplace vendor
+            if ($resourceName === 'open_marketplace.vendor') {
+                return 'open_market_place.vendor';
+            }
             
-            return $finalResource;
+            // Don't add sylius prefix if it's already a prefixed resource
+            if (!str_contains($resourceName, '.')) {
+                return 'sylius.' . $resourceName;
+            }
+            
+            return $resourceName;
         }
 
-        dump('No valid resource found in request');
         return null;
     }
 } 

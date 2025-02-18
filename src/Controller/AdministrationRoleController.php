@@ -19,13 +19,21 @@ class AdministrationRoleController extends AbstractController
                 'payment_method',
                 'tax_category',
                 'customer',
-                'product'
+                'product',
+                'product_option',
+                'product_attribute',
+                'taxon',
+                'vendor'
             ],
             'exportable_resources' => [
                 'country',
                 'order',
                 'customer',
-                'product'
+                'product',
+                'product_option',
+                'product_attribute',
+                'taxon',
+                'vendor'
             ]
         ]);
     }

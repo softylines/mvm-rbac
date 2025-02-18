@@ -25,14 +25,22 @@ final class UpdateAdministrationRoleAction
         'customers',
         'payment_methods_management',
         'tax_categories_management',
-        'products_management'
+        'products_management',
+        'options',
+        'attributes_management',
+        'taxons_management',
+        'vendor'
     ];
 
     private const EXPORTABLE_RESOURCES = [
         'countries_management',
         'orders_management',
         'customers',
-        'products_management'
+        'products_management',
+        'options',
+        'attributes_management',
+        'taxons_management',
+        'vendor'
     ];
 
     public function __construct(

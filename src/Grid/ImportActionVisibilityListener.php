@@ -20,6 +20,10 @@ final class ImportActionVisibilityListener
         'sylius_admin_country_index' => 'countries_management',
         'sylius_admin_payment_method_index' => 'payment_methods_management',
         'sylius_admin_tax_category_index' => 'tax_categories_management',
+        'sylius_admin_product_option_index' => 'options',
+        'sylius_admin_product_attribute_index' => 'attributes_management',
+        'sylius_admin_taxon_index' => 'taxons_management',
+        'sylius_admin_vendor_index' => 'vendor'
     ];
 
     public function __construct(

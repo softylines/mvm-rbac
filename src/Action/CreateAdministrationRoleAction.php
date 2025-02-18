@@ -21,14 +21,22 @@ final class CreateAdministrationRoleAction
         'payment_method',
         'tax_category',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     private const EXPORTABLE_RESOURCES = [
         'country',
         'order',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     public function __construct(

@@ -19,14 +19,22 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
         'customers' => 'customer',
         'payment_methods_management' => 'payment_method',
         'tax_categories_management' => 'tax_category',
-        'products_management' => 'product'
+        'products_management' => 'product',
+        'options' => 'product_option',
+        'attributes_management' => 'product_attribute',
+        'taxons_management' => 'taxon',
+        'vendor' => 'vendor'
     ];
 
     private const EXPORTABLE_RESOURCES = [
         'countries_management' => 'country',
         'orders_management' => 'order',
         'customers' => 'customer',
-        'products_management' => 'product'
+        'products_management' => 'product',
+        'options' => 'product_option',
+        'attributes_management' => 'product_attribute',
+        'taxons_management' => 'taxon',
+        'vendor' => 'vendor'
     ];
 
     public function canAccessSection(AdminUserInterface $admin, AccessRequest $accessRequest): bool
@@ -135,6 +143,10 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
             'country' => ['csv', 'excel', 'json'],
             'payment_method' => ['csv', 'excel', 'json'],
             'tax_category' => ['csv', 'excel', 'json'],
+            'product_option' => ['csv', 'excel', 'json'],
+            'product_attribute' => ['csv', 'excel', 'json'],
+            'taxon' => ['csv', 'excel', 'json'],
+            'vendor' => ['csv', 'excel', 'json']
         ];
 
         return $readerTypes[$resource] ?? null;
@@ -152,6 +164,10 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
             'customer' => ['csv', 'excel', 'json'],
             'country' => ['csv', 'excel', 'json'],
             'order' => ['csv', 'excel', 'json'],
+            'product_option' => ['csv', 'excel', 'json'],
+            'product_attribute' => ['csv', 'excel', 'json'],
+            'taxon' => ['csv', 'excel', 'json'],
+            'vendor' => ['csv', 'excel', 'json']
         ];
 
         return $writerTypes[$resource] ?? null;

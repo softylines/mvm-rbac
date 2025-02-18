@@ -93,12 +93,28 @@ final class InstallPluginCommand extends Command
             ];
 
             foreach ($configuratorPermissions as $section) {
-                $configuratorRole->addPermission(Permission::ofType($section, [
+                $operationTypes = [
                     OperationType::read(),
                     OperationType::create(),
                     OperationType::update(),
                     OperationType::delete(),
-                ]));
+                ];
+                
+                // Add import/export for specific sections
+                if (in_array($section, [
+                    'options',
+                    'attributes_management',
+                    'taxons_management',
+                    'vendor',
+                    'products_management',
+                    'customers',
+                    'countries_management'
+                ])) {
+                    $operationTypes[] = OperationType::import();
+                    $operationTypes[] = OperationType::export();
+                }
+                
+                $configuratorRole->addPermission(Permission::ofType($section, $operationTypes));
             }
 
             $this->entityManager->persist($configuratorRole);

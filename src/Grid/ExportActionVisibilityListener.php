@@ -19,6 +19,10 @@ final class ExportActionVisibilityListener
         'sylius_admin_product_index' => 'products_management',
         'sylius_admin_order_index' => 'orders_management',
         'sylius_admin_country_index' => 'countries_management',
+        'sylius_admin_product_option_index' => 'options',
+        'sylius_admin_product_attribute_index' => 'attributes_management',
+        'sylius_admin_taxon_index' => 'taxons_management',
+        'sylius_admin_vendor_index' => 'vendor'
     ];
 
     public function __construct(

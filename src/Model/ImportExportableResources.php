@@ -12,14 +12,22 @@ final class ImportExportableResources
         'payment_method',
         'tax_category',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     public const EXPORTABLE_RESOURCES = [
         'country',
         'order',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     public static function supportsImport(string $resource): bool
