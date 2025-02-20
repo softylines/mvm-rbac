@@ -41,7 +41,7 @@ sylius_user:
                     model: App\Entity\User\AdminUser
 
 ```
-5.update config/packages/doctrine.yaml
+6.update config/packages/doctrine.yaml
 ```yaml
 parameters:
   # Adds a fallback DATABASE_URL if the env var is not set.
@@ -102,7 +102,7 @@ doctrine:
 
 
 ```
-5. Include traits and override the models
+7. Include traits and override the models
 
 ```php
 /src/Entity/User/AdminUser.php
@@ -205,7 +205,7 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 
 ```
 
-6. Finish the installation updating the database schema and installing assets
+8. Finish the installation updating the database schema and installing assets
 
 ```
 php bin/console doctrine:migrations:migrate
@@ -213,7 +213,7 @@ php bin/console sylius:theme:assets:install
 php bin/console cache:clear
 ```
 
-7. Run installation command
+9. Run installation command
 
    ```
    php bin/console odiseo:rbac:install
