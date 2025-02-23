@@ -18,6 +18,7 @@ final class AdministrationRolePermissionNormalizer implements AdministrationRole
         'options' => 'product_option',
         'attributes_management' => 'product_attribute',
         'taxons_management' => 'taxon',
+        'taxons_management' => 'taxonomy',
         'vendor' => 'vendor'
     ];
 

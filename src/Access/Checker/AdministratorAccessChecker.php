@@ -23,6 +23,7 @@ final class AdministratorAccessChecker implements AdministratorAccessCheckerInte
         'options' => 'product_option',
         'attributes_management' => 'product_attribute',
         'taxons_management' => 'taxon',
+        'taxons_management' => 'taxonomy',
         'vendor' => 'vendor'
     ];
 

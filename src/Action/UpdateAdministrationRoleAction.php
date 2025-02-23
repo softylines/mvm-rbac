@@ -63,6 +63,22 @@ final class UpdateAdministrationRoleAction
             $administrationRole = $this->administrationRoleRepository->find($request->attributes->getInt('id'));
             
             $newPermissions = $request->request->all()['permissions'] ?? [];
+            
+            // Ensure Read permission is set when other permissions are selected
+            foreach ($newPermissions as $section => $operationTypes) {
+                if (!empty($operationTypes)) {
+                    // If any permission is set but Read is not, add Read permission
+                    if (!isset($operationTypes[OperationType::READ]) && 
+                        (isset($operationTypes[OperationType::CREATE]) ||
+                         isset($operationTypes[OperationType::UPDATE]) ||
+                         isset($operationTypes[OperationType::DELETE]) ||
+                         isset($operationTypes[OperationType::IMPORT]) ||
+                         isset($operationTypes[OperationType::EXPORT]))) {
+                        $newPermissions[$section][OperationType::READ] = OperationType::READ;
+                    }
+                }
+            }
+
             $currentPermissions = $administrationRole->getPermissions();
 
             $currentUser = $this->security->getUser();

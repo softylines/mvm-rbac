@@ -28,6 +28,7 @@ final class ImportExportAccessListener
         'sylius.product_option' => 'options',
         'sylius.product_attribute' => 'attributes_management',
         'sylius.taxon' => 'taxons_management',
+        'sylius.taxonomy' => 'taxons_management',
         'sylius.open_market_place.vendor' => 'vendor'
     ];
 
