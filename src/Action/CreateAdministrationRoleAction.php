@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Odiseo\SyliusRbacPlugin\Entity\OperationType;
 
 final class CreateAdministrationRoleAction
 {
@@ -21,14 +22,22 @@ final class CreateAdministrationRoleAction
         'payment_method',
         'tax_category',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     private const EXPORTABLE_RESOURCES = [
         'country',
         'order',
         'customer',
-        'product'
+        'product',
+        'product_option',
+        'product_attribute',
+        'taxon',
+        'vendor'
     ];
 
     public function __construct(
@@ -46,6 +55,21 @@ final class CreateAdministrationRoleAction
         try {
             /** @var array $administrationRolePermissions */
             $administrationRolePermissions = $request->request->all()['permissions'] ?? [];
+
+            // Ensure Read permission is set when other permissions are selected
+            foreach ($administrationRolePermissions as $section => $operationTypes) {
+                if (!empty($operationTypes)) {
+                    // If any permission is set but Read is not, add Read permission
+                    if (!isset($operationTypes[OperationType::READ]) && 
+                        (isset($operationTypes[OperationType::CREATE]) ||
+                         isset($operationTypes[OperationType::UPDATE]) ||
+                         isset($operationTypes[OperationType::DELETE]) ||
+                         isset($operationTypes[OperationType::IMPORT]) ||
+                         isset($operationTypes[OperationType::EXPORT]))) {
+                        $administrationRolePermissions[$section][OperationType::READ] = OperationType::READ;
+                    }
+                }
+            }
 
             $normalizedPermissions = $this
                 ->administrationRolePermissionNormalizer

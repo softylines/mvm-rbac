@@ -189,9 +189,6 @@ final class AdminMenuAccessListener
             }
         }
 
-        if ($this->hasAdminNoAccessToSection($adminUser, Section::sales())) {
-            $menu->removeChild('sales');
-        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::shipping())) {
             $sales = $menu->getChildren()['sales'] ?? null;
             if ($sales) {

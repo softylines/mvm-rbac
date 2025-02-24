@@ -14,14 +14,23 @@ final class AdministrationRolePermissionNormalizer implements AdministrationRole
         'customers' => 'customer',
         'payment_methods_management' => 'payment_method',
         'tax_categories_management' => 'tax_category',
-        'products_management' => 'product'
+        'products_management' => 'product',
+        'options' => 'product_option',
+        'attributes_management' => 'product_attribute',
+        'taxons_management' => 'taxon',
+        'taxons_management' => 'taxonomy',
+        'vendor' => 'vendor'
     ];
 
     private const EXPORTABLE_RESOURCES = [
         'countries_management' => 'country',
         'orders_management' => 'order',
         'customers' => 'customer',
-        'products_management' => 'product'
+        'products_management' => 'product',
+        'options' => 'product_option',
+        'attributes_management' => 'product_attribute',
+        'taxons_management' => 'taxon',
+        'vendor' => 'vendor'
     ];
 
     public function normalize(?array $administrationRolePermissions): array
