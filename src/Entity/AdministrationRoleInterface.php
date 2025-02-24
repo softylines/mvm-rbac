@@ -27,7 +27,7 @@ interface AdministrationRoleInterface extends
 
     public function getPermissions(): array;
 
-   /**
+    /**
      * @return Collection<int, AdministrationRoleAwareInterface>
      */
     public function getAdminUsers(): Collection;
