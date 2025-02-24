@@ -27,14 +27,14 @@ interface AdministrationRoleInterface extends
 
     public function getPermissions(): array;
 
-    /**
-     * @return Collection<int, AdminUserInterface>
+   /**
+     * @return Collection<int, AdministrationRoleAwareInterface>
      */
     public function getAdminUsers(): Collection;
 
-    public function addAdminUser(AdminUserInterface $adminUser): void;
+    public function addAdminUser(AdministrationRoleAwareInterface $adminUser): void;
 
-    public function removeAdminUser(AdminUserInterface $adminUser): void;
+    public function removeAdminUser(AdministrationRoleAwareInterface $adminUser): void;
 
-    public function hasAdminUser(AdminUserInterface $adminUser): bool;
+    public function hasAdminUser(AdministrationRoleAwareInterface $adminUser): bool;
 }
