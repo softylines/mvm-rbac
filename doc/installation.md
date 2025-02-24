@@ -31,8 +31,78 @@ odiseo_sylius_rbac_plugin_admin:
   resource: '@OdiseoSyliusRbacPlugin/Resources/config/routing/admin.yaml'
   prefix: /admin
 ```
+5.add config/packages/sylius_user.yaml
+```yaml
+sylius_user:
+    resources:
+        admin:
+            user:
+                classes:
+                    model: App\Entity\User\AdminUser
 
-5. Include traits and override the models
+```
+6.update config/packages/doctrine.yaml
+```yaml
+parameters:
+  # Adds a fallback DATABASE_URL if the env var is not set.
+  # This allows you to run cache:warmup even if your
+  # environment variables are not available yet.
+  # You should not need to change this value.
+  env(DATABASE_URL): ''
+
+doctrine:
+  dbal:
+    driver: 'pdo_mysql'
+    server_version: '8.0'
+    charset: UTF8
+    url: '%env(resolve:DATABASE_URL)%'
+    types:
+      uuid: 'Ramsey\Uuid\Doctrine\UuidType'
+  orm:
+    auto_generate_proxy_classes: '%kernel.debug%'
+    naming_strategy: doctrine.orm.naming_strategy.underscore
+    auto_mapping: true
+    mappings:
+      App:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/src/Entity'
+        prefix: 'App\Entity'
+        alias: App
+      MessagingComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/Messaging/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\Messaging\Entity'
+      OrderComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/Order/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\Order\Entity'
+      ProductComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/Product/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\Product\Entity'
+      ProductListingComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/ProductListing/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\ProductListing\Entity'
+      VendorComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/Vendor/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\Vendor\Entity'
+      SettlementComponent:
+        is_bundle: false
+        type: xml
+        dir: '%kernel.project_dir%/src/Component/Settlement/Resources/doctrine'
+        prefix: 'BitBag\OpenMarketplace\Component\Settlement\Entity'
+
+
+```
+7. Include traits and override the models
 
 ```php
 /src/Entity/User/AdminUser.php
@@ -110,7 +180,18 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
         foreach ($this->getAdministrationRoles() as $administrationRole) {
             $permissions = $administrationRole->getPermissions();
             foreach ($permissions as $permission) {
-                $roles[] = 'ROLE_' . strtoupper($permission);
+                $reflection = new \ReflectionClass($permission);
+                $properties = $reflection->getProperties();
+                
+                foreach ($properties as $property) {
+                    $property->setAccessible(true);
+                    $value = $property->getValue($permission);
+                    
+                    if (is_string($value)) {
+                        $roles[] = 'ROLE_' . strtoupper($value);
+                        break;
+                    }
+                }
             }
             $roles[] = 'ROLE_' . strtoupper($administrationRole->getName());
         }
@@ -120,9 +201,11 @@ class AdminUser extends BaseAdminUser implements AdministrationRoleAwareInterfac
 }
 
 
+
+
 ```
 
-6. Finish the installation updating the database schema and installing assets
+8. Finish the installation updating the database schema and installing assets
 
 ```
 php bin/console doctrine:migrations:migrate
@@ -130,7 +213,7 @@ php bin/console sylius:theme:assets:install
 php bin/console cache:clear
 ```
 
-7. Run installation command
+9. Run installation command
 
    ```
    php bin/console odiseo:rbac:install
