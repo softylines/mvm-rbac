@@ -21,7 +21,7 @@ class AdministrationRole implements AdministrationRoleInterface
     protected array $permissions = [];
 
     /**
-     * @var Collection<int, AdminUserInterface>
+     * @var Collection<int, AdministrationRoleAwareInterface>
      */
     protected Collection $adminUsers;
 
@@ -50,21 +50,21 @@ class AdministrationRole implements AdministrationRoleInterface
         return $this->adminUsers;
     }
 
-    public function addAdminUser(AdminUserInterface $adminUser): void
+    public function addAdminUser(AdministrationRoleAwareInterface $adminUser): void
     {
         if (!$this->adminUsers->contains($adminUser)) {
             $this->adminUsers->add($adminUser);
         }
     }
 
-    public function removeAdminUser(AdminUserInterface $adminUser): void
+    public function removeAdminUser(AdministrationRoleAwareInterface $adminUser): void
     {
         if ($this->adminUsers->contains($adminUser)) {
             $this->adminUsers->removeElement($adminUser);
         }
     }
 
-    public function hasAdminUser(AdminUserInterface $adminUser): bool
+    public function hasAdminUser(AdministrationRoleAwareInterface $adminUser): bool
     {
         return $this->adminUsers->contains($adminUser);
     }
