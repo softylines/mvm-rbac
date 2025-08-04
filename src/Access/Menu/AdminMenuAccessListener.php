@@ -270,7 +270,7 @@ final class AdminMenuAccessListener
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::cities())) {
-            $config = $menu->getChildren()['configuration'] ?? null;
+            $config = $menu->getChildren()['addressing'] ?? null;
             if ($config) {
                 $config->removeChild('cities');
             }
