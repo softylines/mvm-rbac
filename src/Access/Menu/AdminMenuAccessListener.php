@@ -269,6 +269,12 @@ final class AdminMenuAccessListener
                 $bitbag_cms->removeChild('faq');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::cities())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('cities');
+            }
+        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::sections())) {
             $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
             if ($bitbag_cms) {
