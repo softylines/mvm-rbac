@@ -270,9 +270,9 @@ final class AdminMenuAccessListener
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::cities())) {
-            $bitbag_cms = $menu->getChildren()['configuration'] ?? null;
-            if ($bitbag_cms) {
-                $bitbag_cms->removeChild('cities');
+            $config = $menu->getChildren()['configuration'] ?? null;
+            if ($config) {
+                $config->removeChild('cities');
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::sections())) {
