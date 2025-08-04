@@ -91,7 +91,7 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
             'virtual_wallet' => [
                 'app_admin_wallet_index',
             ],
-            'cities' => [
+            'cities_management' => [
                 'app_city_index',
                 'app_city_create',
                 'app_city_update',
