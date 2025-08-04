@@ -19,7 +19,7 @@ final class Permission implements PermissionInterface
     public const ASSOCIATION_TYPES_MANAGEMENT_PERMISSION = 'association_types_management';
     public const CONFIGURATION_PERMISSION = 'configuration';
     public const CHANNELS_MANAGEMENT_PERMISSION = 'channels_management';
-    public const COUNTRIES_MANAGEMENT_PERMISSION = 'countries_management';  
+    public const COUNTRIES_MANAGEMENT_PERMISSION = 'countries_management';
     public const ZONES_MANAGEMENT_PERMISSION = 'zones_management';
     public const CURRENCIES_MANAGEMENT_PERMISSION = 'currencies_management';
     public const LOCALES_MANAGEMENT_PERMISSION = 'locales_management';
@@ -39,7 +39,7 @@ final class Permission implements PermissionInterface
     public const CATALOG_PROMOTIONS_PERMISSION = 'catalog_promotions';
     public const SALES_MANAGEMENT_PERMISSION = 'sales_management';
     public const SHIPPING_MANAGEMENT_PERMISSION ='shipping_management';
-    public const PAYMENTS_MANAGEMENT_PERMISSION = 'payments_management';    
+    public const PAYMENTS_MANAGEMENT_PERMISSION = 'payments_management';
     public const ORDERS_MANAGEMENT_PERMISSION = 'orders_management';
     public const OPTIONS_PERMISSION = 'options';
 
@@ -54,6 +54,8 @@ final class Permission implements PermissionInterface
     public const PAGES_MANAGEMENT_PERMISSION = 'pages_management';
     public const FAQ_MANAGEMENT_PERMISSION = 'faq_management';
     public const SECTIONS_MANAGEMENT_PERMISSION = 'sections_management';
+    public const CITIES_MANAGEMENT_PERMISSION = 'cities_management';
+
     private string $type;
 
     private array $operationTypes;
@@ -192,6 +194,12 @@ final class Permission implements PermissionInterface
     {
         return new self(self::MESSAGES_CATEGORY_PERMISSION, $operationTypes);
     }
+
+    public static function citiesManagement(array $operationTypes = []): self
+    {
+        return new self(self::CITIES_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+
     public static function ofType(string $type, array $operationTypes = []): self
     {
         return new self($type, array_map(function (string $operationType): OperationType {

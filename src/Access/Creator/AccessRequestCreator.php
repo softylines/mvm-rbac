@@ -208,6 +208,11 @@ foreach($this->configuration['messages_category'] as $messagesCategoryRoutePrefi
             return new AccessRequest(Section::faq(), $operationType);
         }
     }
+    foreach($this->configuration['cities_management'] as $citiesRoutePrefix){
+        if (str_starts_with($routeName, $citiesRoutePrefix)) {
+            return new AccessRequest(Section::cities(), $operationType);
+        }
+    }
     foreach($this->configuration['media_management'] as $mediaRoutePrefix){
         if (str_starts_with($routeName, $mediaRoutePrefix)) {
             return new AccessRequest(Section::media(), $operationType);

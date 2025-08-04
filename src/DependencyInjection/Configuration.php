@@ -63,6 +63,7 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('pages_management')->prototype('scalar')->end()->end()
                         ->arrayNode('faq_management')->prototype('scalar')->end()->end()
                         ->arrayNode('sections_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('cities_management')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('custom_sections')
