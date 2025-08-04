@@ -99,11 +99,11 @@ odiseo_sylius_rbac:
       - bitbag_sylius_cms_plugin_admin_section_create
       - bitbag_sylius_cms_plugin_admin_section_update
       - bitbag_sylius_cms_plugin_admin_section_delete
-  custom_sections:
     cities_management:
       - app_city_index
       - app_city_create
       - app_city_update
       - app_city_delete
+  custom_sections:
     rbac:
       - odiseo_sylius_rbac_plugin
