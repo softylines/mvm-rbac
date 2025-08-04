@@ -34,6 +34,7 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
                     'sylius_admin_tax_category',
                     'sylius_admin_tax_rate',
                     'sylius_admin_zone',
+                    'app_city',
                 ],
                 'customers_management' => [
                     'sylius_admin_customer',
