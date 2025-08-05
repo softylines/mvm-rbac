@@ -98,7 +98,7 @@ final class AdminMenuAccessListener
         if($this->hasAdminNoAccessToSection($adminUser, Section::administrators())){
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
-                $configuration->removeChild('administrators');
+                $configuration->removeChild('admin_users');
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::currencies())) {
