@@ -274,12 +274,48 @@ final class AdminMenuAccessListener
             }
         }
 
+        $marketplace = $menu->getChildren()['marketplace'] ?? null;
+        if ($marketplace) {
+            if (count($marketplace->getChildren()) === 0) {
+                $menu->removeChild('marketplace');
+            }
+        }
+
+        $catalog = $menu->getChildren()['catalog'] ?? null;
+        if ($catalog) {
+            if (count($catalog->getChildren()) === 0) {
+                $menu->removeChild('catalog');
+            }
+        }
+
+        $sales = $menu->getChildren()['sales'] ?? null;
+        if ($sales) {
+            if (count($sales->getChildren()) === 0) {
+                $menu->removeChild('sales');
+            }
+        }
+        
+        $configuration = $menu->getChildren()['configuration'] ?? null;
+        if ($configuration) {
+            if (count($configuration->getChildren()) === 0) {
+                $menu->removeChild('configuration');
+            }
+        }
+
         $addressing = $menu->getChildren()['addressing'] ?? null;
         if ($addressing) {
             if (count($addressing->getChildren()) === 0) {
                 $menu->removeChild('addressing');
             }
         }
+
+        $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+        if ($bitbag_cms) {
+            if (count($bitbag_cms->getChildren()) === 0) {
+                $menu->removeChild('bitbag_cms');
+            }
+        }
+        
     }
 
     private function hasAdminNoAccessToSection(AdminUserInterface $adminUser, Section $section): bool
