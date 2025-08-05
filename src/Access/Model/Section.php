@@ -46,6 +46,8 @@ final class Section
     public const PAGES = 'pages_management';
     public const FAQ = 'faq_management';
     public const SECTIONS = 'sections_management';
+    public const CITIES = 'cities_management';
+
     private string $type;
 
     public static function dashboard(): self{
@@ -220,6 +222,12 @@ final class Section
     {
         return new self(self::SECTIONS);
     }
+
+    public static function cities(): self
+    {
+        return new self(self::CITIES);
+    }
+
     public static function ofType(string $type): self
     {
         return new self($type);

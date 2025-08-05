@@ -63,6 +63,7 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('pages_management')->prototype('scalar')->end()->end()
                         ->arrayNode('faq_management')->prototype('scalar')->end()->end()
                         ->arrayNode('sections_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('cities_management')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('custom_sections')
@@ -121,6 +122,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('shipping_management')->variablePrototype()->end()->end()
                 ->arrayNode('payments_management')->variablePrototype()->end()->end()
                 ->arrayNode('orders_management')->variablePrototype()->end()->end()
+                ->arrayNode('cities_management')->variablePrototype()->end()->end()
             ->end()
         ;
     }

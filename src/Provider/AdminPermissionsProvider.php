@@ -66,7 +66,7 @@ final class AdminPermissionsProvider implements AdminPermissionsProviderInterfac
                 Permission::PAGES_MANAGEMENT_PERMISSION,
                 Permission::FAQ_MANAGEMENT_PERMISSION,
                 Permission::SECTIONS_MANAGEMENT_PERMISSION,
-            
+                Permission::CITIES_MANAGEMENT_PERMISSION,
             ],
         );
 
