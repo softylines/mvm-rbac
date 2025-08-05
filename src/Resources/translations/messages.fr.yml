@@ -1,7 +1,7 @@
 odiseo_sylius_rbac_plugin:
   ui:
     errors:
-      cannot_remove_rbac: "La permission RBAC ne peut pas être supprimée du rôle Configurateur car elle est requise."
+      cannot_remove_rbac: "La permission gestion d'accès ne peut pas être supprimée du rôle Configurateur car elle est requise."
     access: "Accès"
     administration_role: "Rôle d'administration"
     administration_roles: "Rôles d'administration"
@@ -56,13 +56,13 @@ odiseo_sylius_rbac_plugin:
         create: "Créer"
         update: "Modifier"
         delete: "Supprimer"
-      rbac: "RBAC"
+      rbac: "Gestion des accès"
       sales_management: "Ventes"
       product_reviews: "Gestion des avis produits"
       countries_management: "Gestion des pays"
     permissions: "Permissions"
-    rbac: "RBAC"
-    rbac_role: "Rôle RBAC"
+    rbac: "Gestion des accès"
+    rbac_role: "Rôle"
     administration_role_deleted: "Le rôle d'administration a été supprimé"
     administration_role_not_found: "Le rôle d'administration avec l'id %administration_role_id% n'existe pas"
     administration_role_name_not_found: "Nom du rôle d'administration non trouvé"

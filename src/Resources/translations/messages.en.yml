@@ -1,7 +1,7 @@
 odiseo_sylius_rbac_plugin:
   ui:
     errors:
-      cannot_remove_rbac: "The RBAC permission cannot be removed from the Configurator role as it is required."
+      cannot_remove_rbac: "The access management permission cannot be removed from the Configurator role as it is required."
     access: "Access"
     administration_role: "Administration role"
     administration_roles: "Administration roles"
@@ -58,7 +58,7 @@ odiseo_sylius_rbac_plugin:
         write: "Write"
         import: "Import"
         export: "Export"
-      rbac: "RBAC"
+      rbac: "Access Management"
       sales_management: "Sales management"
       product_reviews: "Products reviews management"
       countries_management: "Countries management"
@@ -67,8 +67,8 @@ odiseo_sylius_rbac_plugin:
       marketing: "Marketing"
       sales: "Sales"
     permissions: "Permissions"
-    rbac: "RBAC"
-    rbac_role: "RBAC role"
+    rbac: "Access Management"
+    rbac_role: "Role"
     administration_role_deleted: Administration role has been deleted
     administration_role_not_found: Administration role with id %administration_role_id% does not exist
     administration_role_name_not_found: Administration role name not found
