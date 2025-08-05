@@ -48,6 +48,7 @@ odiseo_sylius_rbac_plugin:
       content_management: "Gestion du contenu"
       faq_management: "Gestion des FAQ"
       cities_management: "Gestion des villes"
+      provinces_management: "Gestion des provinces"
       media_management: "Gestion des médias"
       sections_management: "Gestion des sections"
       operation_type:

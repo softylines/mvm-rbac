@@ -96,6 +96,11 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
                 'app_city_update',
                 'app_city_delete',
             ],
+            'provinces_management' => [
+                'app_province_index',
+                'app_province_update',
+                'app_province_delete',
+            ],
         ];
     }
 }

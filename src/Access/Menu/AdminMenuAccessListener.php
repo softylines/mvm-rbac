@@ -255,6 +255,12 @@ final class AdminMenuAccessListener
                 $config->removeChild('cities');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::provinces())) {
+            $config = $menu->getChildren()['addressing'] ?? null;
+            if ($config) {
+                $config->removeChild('provinces');
+            }
+        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::sections())) {
             $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
             if ($bitbag_cms) {

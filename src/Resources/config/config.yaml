@@ -101,6 +101,8 @@ odiseo_sylius_rbac:
       - bitbag_sylius_cms_plugin_admin_section_delete
     cities_management:
       - app_city
+    provinces_management:
+      - app_province
   custom_sections:
     rbac:
       - odiseo_sylius_rbac_plugin
