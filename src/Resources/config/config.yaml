@@ -103,6 +103,8 @@ odiseo_sylius_rbac:
       - app_city
     provinces_management:
       - app_province
+    packs_management:
+      - app_pack
   custom_sections:
     rbac:
       - odiseo_sylius_rbac_plugin

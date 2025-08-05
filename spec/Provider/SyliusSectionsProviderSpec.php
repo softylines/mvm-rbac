@@ -34,7 +34,7 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
                     'sylius_admin_tax_category',
                     'sylius_admin_tax_rate',
                     'sylius_admin_zone',
-                    'app_city',
+                    'app_pack',
                 ],
                 'customers_management' => [
                     'sylius_admin_customer',
@@ -55,6 +55,10 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
                     'sylius_admin_pages',
                     'sylius_admin_faq',
                     'sylius_admin_sections',
+                ],
+                'addressing' => [
+                    'app_city',
+                    'app_province',
                 ],
                 'custom' => [
                     'rbac' => [
@@ -80,6 +84,7 @@ final class SyliusSectionsProviderSpec extends ObjectBehavior
             'sales_management',
             'content_management',
             'rbac',
+            'addressing',
         ]);
     }
 }

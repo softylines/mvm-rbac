@@ -146,6 +146,12 @@ final class AdminMenuAccessListener
                 $configuration->removeChild('tax_categories');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::packs())) {
+            $configuration = $menu->getChildren()['configuration'] ?? null;
+            if ($configuration) {
+                $configuration->removeChild('packs');
+            }
+        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::customers())) {
             $menu->removeChild('customers');
         }

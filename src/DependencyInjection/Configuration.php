@@ -65,6 +65,7 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('sections_management')->prototype('scalar')->end()->end()
                         ->arrayNode('cities_management')->prototype('scalar')->end()->end()
                         ->arrayNode('provinces_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('packs_management')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('custom_sections')
@@ -125,6 +126,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('orders_management')->variablePrototype()->end()->end()
                 ->arrayNode('cities_management')->variablePrototype()->end()->end()
                 ->arrayNode('provinces_management')->variablePrototype()->end()->end()
+                ->arrayNode('packs_management')->variablePrototype()->end()->end()
             ->end()
         ;
     }

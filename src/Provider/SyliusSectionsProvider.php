@@ -101,6 +101,11 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
                 'app_province_update',
                 'app_province_delete',
             ],
+            'packs_management' => [
+                'app_pack_index',
+                'app_pack_update',
+                'app_pack_delete',
+            ],
         ];
     }
 }

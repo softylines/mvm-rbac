@@ -48,6 +48,7 @@ final class Section
     public const SECTIONS = 'sections_management';
     public const CITIES = 'cities_management';
     public const PROVINCES = 'provinces_management';
+    public const PACKS = 'packs_management';
 
     private string $type;
 
@@ -232,6 +233,11 @@ final class Section
     public static function provinces(): self
     {
         return new self(self::PROVINCES);
+    }
+
+    public static function packs(): self
+    {
+        return new self(self::PACKS);
     }
 
     public static function ofType(string $type): self
