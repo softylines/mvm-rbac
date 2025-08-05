@@ -122,6 +122,7 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('shipping_management')->variablePrototype()->end()->end()
                 ->arrayNode('payments_management')->variablePrototype()->end()->end()
                 ->arrayNode('orders_management')->variablePrototype()->end()->end()
+                ->arrayNode('cities_management')->variablePrototype()->end()->end()
             ->end()
         ;
     }

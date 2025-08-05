@@ -89,7 +89,7 @@ final class InstallPluginCommand extends Command
                 'currencies_management', 'administrators_management', 'exchange_rates_management',
                 'tax_categories_management', 'payment_methods_management',
                 'shipping_methods_management', 'association_types_management',
-                'shipping_categories_management'
+                'shipping_categories_management', 'cities_management'
             ];
 
             foreach ($configuratorPermissions as $section) {
