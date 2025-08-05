@@ -273,6 +273,13 @@ final class AdminMenuAccessListener
                 $menu->removeChild($customSection);
             }
         }
+
+        $addressing = $menu->getChildren()['addressing'] ?? null;
+        if ($addressing) {
+            if (count($addressing->getChildren()) === 0) {
+                $menu->removeChild('addressing');
+            }
+        }
     }
 
     private function hasAdminNoAccessToSection(AdminUserInterface $adminUser, Section $section): bool
