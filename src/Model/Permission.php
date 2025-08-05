@@ -55,6 +55,11 @@ final class Permission implements PermissionInterface
     public const FAQ_MANAGEMENT_PERMISSION = 'faq_management';
     public const SECTIONS_MANAGEMENT_PERMISSION = 'sections_management';
     public const CITIES_MANAGEMENT_PERMISSION = 'cities_management';
+    public const PROVINCES_MANAGEMENT_PERMISSION = 'provinces_management';
+    public const PACKS_MANAGEMENT_PERMISSION = 'packs_management';
+    public const TESTIMONIALS_MANAGEMENT_PERMISSION = 'testimonials_management';
+    public const TESTIMONIALS_SECTIONS_MANAGEMENT_PERMISSION = 'testimonials_sections_management';
+
 
     private string $type;
 
@@ -198,6 +203,26 @@ final class Permission implements PermissionInterface
     public static function citiesManagement(array $operationTypes = []): self
     {
         return new self(self::CITIES_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+
+    public static function provincesManagement(array $operationTypes = []): self
+    {
+        return new self(self::PROVINCES_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+
+    public static function packsManagement(array $operationTypes = []): self
+    {
+        return new self(self::PACKS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+
+    public static function testimonialsManagement(array $operationTypes = []): self
+    {
+        return new self(self::TESTIMONIALS_MANAGEMENT_PERMISSION, $operationTypes);
+    }
+
+    public static function testimonialsSectionsManagement(array $operationTypes = []): self
+    {
+        return new self(self::TESTIMONIALS_SECTIONS_MANAGEMENT_PERMISSION, $operationTypes);
     }
 
     public static function ofType(string $type, array $operationTypes = []): self

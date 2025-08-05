@@ -64,6 +64,10 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('faq_management')->prototype('scalar')->end()->end()
                         ->arrayNode('sections_management')->prototype('scalar')->end()->end()
                         ->arrayNode('cities_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('provinces_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('packs_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('testimonials_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('testimonials_sections_management')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('custom_sections')
@@ -123,6 +127,10 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('payments_management')->variablePrototype()->end()->end()
                 ->arrayNode('orders_management')->variablePrototype()->end()->end()
                 ->arrayNode('cities_management')->variablePrototype()->end()->end()
+                ->arrayNode('provinces_management')->variablePrototype()->end()->end()
+                ->arrayNode('packs_management')->variablePrototype()->end()->end()
+                ->arrayNode('testimonials_management')->variablePrototype()->end()->end()
+                ->arrayNode('testimonials_sections_management')->variablePrototype()->end()->end()
             ->end()
         ;
     }

@@ -32,9 +32,8 @@ final class AdminMenuAccessListener
 
         $menu = $event->getMenu();
 
-         if ($this->hasAdminNoAccessToSection($adminUser, Section::products())) {
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::products())) {
             $catalog = $menu->getChildren()['catalog'] ?? null;
- 
             if ($catalog) {
                 $catalog->removeChild('products');
             }
@@ -81,14 +80,12 @@ final class AdminMenuAccessListener
                 $configuration->removeChild('channels');
             }
         }
-
         if ($this->hasAdminNoAccessToSection($adminUser, Section::countries())) {
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
                 $configuration->removeChild('countries');
             }
         }
-
         if ($this->hasAdminNoAccessToSection($adminUser, Section::zones())) {
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
@@ -98,7 +95,7 @@ final class AdminMenuAccessListener
         if($this->hasAdminNoAccessToSection($adminUser, Section::administrators())){
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
-                $configuration->removeChild('administrators');
+                $configuration->removeChild('admin_users');
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::currencies())) {
@@ -107,7 +104,6 @@ final class AdminMenuAccessListener
                 $configuration->removeChild('currencies');
             }
         }
-
         if ($this->hasAdminNoAccessToSection($adminUser, Section::locales())) {
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
@@ -148,6 +144,12 @@ final class AdminMenuAccessListener
             $configuration = $menu->getChildren()['configuration'] ?? null;
             if ($configuration) {
                 $configuration->removeChild('tax_categories');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::packs())) {
+            $configuration = $menu->getChildren()['configuration'] ?? null;
+            if ($configuration) {
+                $configuration->removeChild('packs');
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::customers())) {
@@ -255,16 +257,76 @@ final class AdminMenuAccessListener
                 $config->removeChild('cities');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::provinces())) {
+            $config = $menu->getChildren()['addressing'] ?? null;
+            if ($config) {
+                $config->removeChild('provinces');
+            }
+        }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::sections())) {
             $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
             if ($bitbag_cms) {
                 $bitbag_cms->removeChild('sections');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::testimonials())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('testimonials');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::testimonialsSections())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('testimonials_section');
+            }
+        }
         /** @var string $customSection */
         foreach (array_keys($this->configuration['custom']) as $customSection) {
             if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {
                 $menu->removeChild($customSection);
+            }
+        }
+        $marketplace = $menu->getChildren()['marketplace'] ?? null;
+        if ($marketplace) {
+            if (count($marketplace->getChildren()) === 0) {
+                $menu->removeChild('marketplace');
+            }
+        }
+        $catalog = $menu->getChildren()['catalog'] ?? null;
+        if ($catalog) {
+            if (count($catalog->getChildren()) === 0) {
+                $menu->removeChild('catalog');
+            }
+        }
+        $sales = $menu->getChildren()['sales'] ?? null;
+        if ($sales) {
+            if (count($sales->getChildren()) === 0) {
+                $menu->removeChild('sales');
+            }
+        }
+        $marketing = $menu->getChildren()['marketing'] ?? null;
+        if ($marketing) {
+            if (count($marketing->getChildren()) === 0) {
+                $menu->removeChild('marketing');
+            }
+        }
+        $configuration = $menu->getChildren()['configuration'] ?? null;
+        if ($configuration) {
+            if (count($configuration->getChildren()) === 0) {
+                $menu->removeChild('configuration');
+            }
+        }
+        $addressing = $menu->getChildren()['addressing'] ?? null;
+        if ($addressing) {
+            if (count($addressing->getChildren()) === 0) {
+                $menu->removeChild('addressing');
+            }
+        }
+        $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+        if ($bitbag_cms) {
+            if (count($bitbag_cms->getChildren()) === 0) {
+                $menu->removeChild('bitbag_cms');
             }
         }
     }

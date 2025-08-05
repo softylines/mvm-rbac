@@ -96,6 +96,28 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
                 'app_city_update',
                 'app_city_delete',
             ],
+            'provinces_management' => [
+                'app_province_index',
+                'app_province_update',
+                'app_province_delete',
+            ],
+            'packs_management' => [
+                'app_pack_index',
+                'app_pack_update',
+                'app_pack_delete',
+            ],
+            'testimonials_management' => [
+                'app_admin_testimonial_index',
+                'app_admin_testimonial_create',
+                'app_admin_testimonial_update',
+                'app_admin_testimonial_delete',
+            ],
+            'testimonials_sections_management' => [
+                'app_admin_testimonials_section_index',
+                'app_admin_testimonials_section_create',
+                'app_admin_testimonials_section_update',
+                'app_admin_testimonials_section_delete',
+            ],
         ];
     }
 }
