@@ -93,7 +93,6 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
             ],
             'cities_management' => [
                 'app_city_index',
-                'app_city_create',
                 'app_city_update',
                 'app_city_delete',
             ],
