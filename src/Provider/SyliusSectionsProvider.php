@@ -106,6 +106,18 @@ final class SyliusSectionsProvider implements SyliusSectionsProviderInterface
                 'app_pack_update',
                 'app_pack_delete',
             ],
+            'testimonials_management' => [
+                'app_admin_testimonial_index',
+                'app_admin_testimonial_create',
+                'app_admin_testimonial_update',
+                'app_admin_testimonial_delete',
+            ],
+            'testimonials_sections_management' => [
+                'app_admin_testimonials_section_index',
+                'app_admin_testimonials_section_create',
+                'app_admin_testimonials_section_update',
+                'app_admin_testimonials_section_delete',
+            ],
         ];
     }
 }

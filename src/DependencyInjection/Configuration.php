@@ -66,6 +66,8 @@ final class Configuration implements ConfigurationInterface
                         ->arrayNode('cities_management')->prototype('scalar')->end()->end()
                         ->arrayNode('provinces_management')->prototype('scalar')->end()->end()
                         ->arrayNode('packs_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('testimonials_management')->prototype('scalar')->end()->end()
+                        ->arrayNode('testimonials_sections_management')->prototype('scalar')->end()->end()
                     ->end()
                 ->end()
                 ->arrayNode('custom_sections')
@@ -127,6 +129,8 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('cities_management')->variablePrototype()->end()->end()
                 ->arrayNode('provinces_management')->variablePrototype()->end()->end()
                 ->arrayNode('packs_management')->variablePrototype()->end()->end()
+                ->arrayNode('testimonials_management')->variablePrototype()->end()->end()
+                ->arrayNode('testimonials_sections_management')->variablePrototype()->end()->end()
             ->end()
         ;
     }

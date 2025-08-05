@@ -105,6 +105,10 @@ odiseo_sylius_rbac:
       - app_province
     packs_management:
       - app_pack
+    testimonials_management:
+      - app_admin_testimonial
+    testimonials_sections_management:
+      - app_admin_testimonials_section
   custom_sections:
     rbac:
       - odiseo_sylius_rbac_plugin

@@ -206,6 +206,16 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
                 return new AccessRequest(Section::packs(), $operationType);
             }
         }
+        foreach ($this->configuration['testimonials_management'] as $testimonialsRoutePrefix){
+            if (str_starts_with($routeName, $testimonialsRoutePrefix)) {
+                return new AccessRequest(Section::testimonials(), $operationType);
+            }
+        }
+        foreach ($this->configuration['testimonials_sections_management'] as $testimonialsSectionsRoutePrefix){
+            if (str_starts_with($routeName, $testimonialsSectionsRoutePrefix)) {
+                return new AccessRequest(Section::testimonialsSections(), $operationType);
+            }
+        }
         foreach ($this->configuration['media_management'] as $mediaRoutePrefix){
             if (str_starts_with($routeName, $mediaRoutePrefix)) {
                 return new AccessRequest(Section::media(), $operationType);

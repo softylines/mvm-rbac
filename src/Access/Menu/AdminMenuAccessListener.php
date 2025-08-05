@@ -269,6 +269,18 @@ final class AdminMenuAccessListener
                 $bitbag_cms->removeChild('sections');
             }
         }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::testimonials())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('testimonials');
+            }
+        }
+        if ($this->hasAdminNoAccessToSection($adminUser, Section::testimonialsSections())) {
+            $bitbag_cms = $menu->getChildren()['bitbag_cms'] ?? null;
+            if ($bitbag_cms) {
+                $bitbag_cms->removeChild('testimonials_section');
+            }
+        }
         /** @var string $customSection */
         foreach (array_keys($this->configuration['custom']) as $customSection) {
             if ($this->hasAdminNoAccessToSection($adminUser, Section::ofType($customSection))) {

@@ -50,6 +50,8 @@ odiseo_sylius_rbac_plugin:
       cities_management: "Gestion des villes"
       provinces_management: "Gestion des provinces"
       packs_management: "Gestion des packs"
+      testimonials_management: "Gestion des témoignages"
+      testimonials_sections_management: "Gestion des sections de témoignages"
       media_management: "Gestion des médias"
       sections_management: "Gestion des sections"
       operation_type:
