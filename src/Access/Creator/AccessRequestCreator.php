@@ -217,6 +217,11 @@ final class AccessRequestCreator implements AccessRequestCreatorInterface
                 return new AccessRequest(Section::media(), $operationType);
             }
         }
+        foreach($this->configuration['shipping_management'] as $shippingRoutePrefix){
+            if (str_starts_with($routeName, $shippingRoutePrefix)) {
+                return new AccessRequest(Section::shipping(), $operationType);
+            }
+        }
         foreach($this->configuration['sections_management'] as $sectionsRoutePrefix){
             if (str_starts_with($routeName, $sectionsRoutePrefix)) {
                 return new AccessRequest(Section::sections(), $operationType);
