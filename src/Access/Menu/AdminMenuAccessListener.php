@@ -174,7 +174,7 @@ final class AdminMenuAccessListener
         if ($this->hasAdminNoAccessToSection($adminUser, Section::shipping())) {
             $sales = $menu->getChildren()['sales'] ?? null;
             if ($sales) {
-                $sales->removeChild('shipping');
+                $sales->removeChild('shipments');
             }
         }
         if ($this->hasAdminNoAccessToSection($adminUser, Section::payments())) {
