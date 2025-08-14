@@ -10,7 +10,8 @@ odiseo_sylius_rbac_plugin:
     permission:
       catalog_management: "Catalogue"
       configuration: "Configuration"
-      customers_management: "Clients"
+      customers_management: "Gestion des clients"
+      customers: "Clients"
       marketing_management: "Marketing"
       options: "Options"
       association_types_management: "Gestion des types d'association"
