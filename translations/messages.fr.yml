@@ -1,0 +1,3 @@
+softylines_sylius_rbac_plugin:
+  ui:
+    role_name: "Nom du rôle"
