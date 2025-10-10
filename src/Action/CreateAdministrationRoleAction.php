@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Odiseo\SyliusRbacPlugin\Entity\OperationType;
+use Odiseo\SyliusRbacPlugin\Access\Model\OperationType;
 
 final class CreateAdministrationRoleAction
 {
@@ -60,7 +60,7 @@ final class CreateAdministrationRoleAction
             foreach ($administrationRolePermissions as $section => $operationTypes) {
                 if (!empty($operationTypes)) {
                     // If any permission is set but Read is not, add Read permission
-                    if (!isset($operationTypes[OperationType::READ]) && 
+                    if (!isset($operationTypes[OperationType::READ]) &&
                         (isset($operationTypes[OperationType::CREATE]) ||
                          isset($operationTypes[OperationType::UPDATE]) ||
                          isset($operationTypes[OperationType::DELETE]) ||
